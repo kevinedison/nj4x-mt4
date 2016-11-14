@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ABEE549A-8073-49B1-A78C-568C466691AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>nj4x</RootNamespace>
+    <AssemblyName>nj4x</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\target</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>false</NoStdLib>
+    <DocumentationFile>.\Output\nj4x.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\target</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>.\Output\nj4x.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!--AssemblyOriginatorKeyFile>nj4x.pfx</AssemblyOriginatorKeyFile-->
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>packages\NLog.4.3.10\lib\net40\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Metatrader\ADXIndicatorLines.cs" />
+    <Compile Include="Metatrader\AppliedPrice.cs" />
+    <Compile Include="Metatrader\ArrowCodes.cs" />
+    <Compile Include="Metatrader\ArrowSpecial.cs" />
+    <Compile Include="Metatrader\BandsIndicatorLines.cs" />
+    <Compile Include="Metatrader\BasE91.cs" />
+    <Compile Include="Metatrader\Broker.cs" />
+    <Compile Include="Metatrader\Color.cs" />
+    <Compile Include="Metatrader\AccountInfo.cs" />
+    <Compile Include="Metatrader\DrawingShape.cs" />
+    <Compile Include="Metatrader\DrawingStyle.cs" />
+    <Compile Include="Metatrader\ErrAccountDisabled.cs" />
+    <Compile Include="Metatrader\ErrCommonError.cs" />
+    <Compile Include="Metatrader\ErrCustomIndicatorError.cs" />
+    <Compile Include="Metatrader\ErrGlobalVariableNotFound.cs" />
+    <Compile Include="Metatrader\ErrHistoryWillUpdated.cs" />
+    <Compile Include="Metatrader\ErrIncorrectSeriesarrayUsing.cs" />
+    <Compile Include="Metatrader\ErrIntegerParameterExpected.cs" />
+    <Compile Include="Metatrader\ErrInvalidAccount.cs" />
+    <Compile Include="Metatrader\ErrInvalidFunctionParamvalue.cs" />
+    <Compile Include="Metatrader\ErrInvalidPrice.cs" />
+    <Compile Include="Metatrader\ErrInvalidPriceParam.cs" />
+    <Compile Include="Metatrader\ErrInvalidStops.cs" />
+    <Compile Include="Metatrader\ErrInvalidTicket.cs" />
+    <Compile Include="Metatrader\ErrInvalidTradeParameters.cs" />
+    <Compile Include="Metatrader\ErrInvalidTradeVolume.cs" />
+    <Compile Include="Metatrader\ErrLongPositionsOnlyAllowed.cs" />
+    <Compile Include="Metatrader\ErrLongsNotAllowed.cs" />
+    <Compile Include="Metatrader\ErrMarketClosed.cs" />
+    <Compile Include="Metatrader\ErrNoConnection.cs" />
+    <Compile Include="Metatrader\ErrNoError.cs" />
+    <Compile Include="Metatrader\ErrNoOrderSelected.cs" />
+    <Compile Include="Metatrader\ErrNoResult.cs" />
+    <Compile Include="Metatrader\ErrNotEnoughMoney.cs" />
+    <Compile Include="Metatrader\ErrOffQuotes.cs" />
+    <Compile Include="Metatrader\ErrOldVersion.cs" />
+    <Compile Include="Metatrader\ErrOrderLocked.cs" />
+    <Compile Include="Metatrader\ErrPriceChanged.cs" />
+    <Compile Include="Metatrader\ErrRequote.cs" />
+    <Compile Include="Metatrader\ErrServerBusy.cs" />
+    <Compile Include="Metatrader\ErrShortsNotAllowed.cs" />
+    <Compile Include="Metatrader\ErrStringParameterExpected.cs" />
+    <Compile Include="Metatrader\ErrTooFrequentRequests.cs" />
+    <Compile Include="Metatrader\ErrTooManyRequests.cs" />
+    <Compile Include="Metatrader\ErrTradeContextBusy.cs" />
+    <Compile Include="Metatrader\ErrTradeDisabled.cs" />
+    <Compile Include="Metatrader\ErrTradeExpirationDenied.cs" />
+    <Compile Include="Metatrader\ErrTradeModifyDenied.cs" />
+    <Compile Include="Metatrader\ErrTradeNotAllowed.cs" />
+    <Compile Include="Metatrader\ErrTradeTimeout.cs" />
+    <Compile Include="Metatrader\ErrTradeTimeout2.cs" />
+    <Compile Include="Metatrader\ErrTradeTimeout3.cs" />
+    <Compile Include="Metatrader\ErrTradeTimeout4.cs" />
+    <Compile Include="Metatrader\ErrTradeTooManyOrders.cs" />
+    <Compile Include="Metatrader\ErrUnknownSymbol.cs" />
+    <Compile Include="Metatrader\GatorMode.cs" />
+    <Compile Include="Metatrader\IchimokuSource.cs" />
+    <Compile Include="Metatrader\MACDIndicatorLines.cs" />
+    <Compile Include="Metatrader\MarketInfo.cs" />
+    <Compile Include="Metatrader\MarketInformation.cs" />
+    <Compile Include="Metatrader\MessageBoxFlag.cs" />
+    <Compile Include="Metatrader\MessageBoxID.cs" />
+    <Compile Include="Metatrader\MovingAverageMethod.cs" />
+    <Compile Include="Metatrader\MT4.cs" />
+    <Compile Include="Metatrader\MT4Exception.cs" />
+    <Compile Include="Metatrader\ObjectProperty.cs" />
+    <Compile Include="Metatrader\ObjectType.cs" />
+    <Compile Include="Metatrader\ObjectVisibility.cs" />
+    <Compile Include="Metatrader\OrderImpl.cs" />
+    <Compile Include="Metatrader\PositionChangeImpl.cs" />
+    <Compile Include="Metatrader\PositionImpl.cs" />
+    <Compile Include="Metatrader\Rate.cs" />
+    <Compile Include="Metatrader\SelectionPool.cs" />
+    <Compile Include="Metatrader\SelectionType.cs" />
+    <Compile Include="Metatrader\Series.cs" />
+    <Compile Include="Metatrader\SymbolInfo.cs" />
+    <Compile Include="Metatrader\TickInfo.cs" />
+    <Compile Include="Metatrader\Timeframe.cs" />
+    <Compile Include="Metatrader\TradeOperation.cs" />
+    <Compile Include="Metatrader\UninitializeReason.cs" />
+    <Compile Include="Net\BasicStrategyRunner.cs" />
+    <Compile Include="Net\Greeter.cs" />
+    <Compile Include="Net\IStrategyRunner.cs" />
+    <Compile Include="Net\MT4TerminalConnection.cs" />
+    <Compile Include="Net\NJ4XServer.cs" />
+    <Compile Include="Net\TerminalClient.cs" />
+    <Compile Include="IOrderInfo.cs" />
+    <Compile Include="IPositionChangeInfo.cs" />
+    <Compile Include="IPositionInfo.cs" />
+    <Compile Include="IPositionListener.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategy.cs" />
+    <Compile Include="Metatrader\DDParser.cs" />
+    <Compile Include="Metatrader\SDParser.cs" />
+    <Compile Include="Version.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <!--None Include="nj4x.pfx" /-->
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

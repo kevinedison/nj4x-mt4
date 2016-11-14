@@ -1,0 +1,37 @@
+LIBRARY mt45if
+
+EXPORTS jfxConnect
+		jfxDisconnect
+		jfxGetCommand
+		jfxSendResult
+		jfxLog
+		jfxHWnd
+		jfxPositionInit
+		jfxPositionOrderInfo
+		jfxPositionRes
+		jfxMqlRatesInit
+		jfxMqlRatesAdd
+		jfxMqlRatesRes
+		Test
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+        
+        
+        
+        
+        
+		
+        

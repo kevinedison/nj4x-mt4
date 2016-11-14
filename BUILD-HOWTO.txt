@@ -1,0 +1,49 @@
+Welcome to NJ4X, an implementation of the Java /.Net Forex API
+
+
+Building NJ4X from the sources
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To build an NJ4X binary distribution from an NJ4X source distribution,
+you must have a J2SE(TM) version 1.7 or later installed
+(see http://www.oracle.com/technetwork/java/javase/downloads/index.html).
+
+Download and install Visual Studio Community (https://www.visualstudio.com/downloads/)
+
+Unpack the NJ4X source distribution into a directory that will be
+referred to as $NJ4X, and follow the instructions below.
+
+* Download and install Apache Maven from
+  http://maven.apache.org/download.cgi
+  The directory where Maven is installed will be referred to as
+  $MAVEN_HOME (Add $MAVEN_HOME\bin to PATH environment variable).
+
+* Open "mt4if\src\main\c++\mt45\mt45if.sln" once and upgrade it to the version of MS Visual Studio you got (project comes with v120_xp platform toolset (VS2013) for backward compatibility)
+
+* Download nuget.exe (https://dist.nuget.org/index.html) and put its location to %PATH%
+
+* Download launch4j (http://launch4j.sourceforge.net) and configure <launch4j.dir> property in root pom.xml
+
+* Configure Microsoft Visual Studio paths in root pom.xml, e.g.
+
+        <devenv>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe</devenv>
+        <mstest>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\MSTest.exe</mstest>
+
+* Configure 7Zip path in root pom.xml, e.g.
+
+        <zip7>C:\Program Files\7-Zip\7z.exe</zip7>
+
+* In $NJ4X\nj4x-src-2.6.2 directory you'd need to edit root pom.xml in order to set correct location for MS Visual Studio and 7Zip
+
+* To build everything just issue the command "mvn clean package":
+
+  $NJ4X\nj4x-src-2.6.2> mvn clean package
+
+  Resulting artifacts can be found then in respective module's "target" directories, e.g.
+
+    NJ4X Java library:  nj4x-src-2.6.2\jfx\target\jfx-2.6.2.jar 
+
+    Terminal Server:    nj4x-src-2.6.2\nj4x-ts\target\nj4x-ts-2.6.2-jar-with-dependencies.jar 
+                                (usage: java -jar nj4x-ts-2.6.2-jar-with-dependencies.jar)
+
+    NJ4X .Net library:  nj4x-src-2.6.2\nj4x\target\nj4x.dll 

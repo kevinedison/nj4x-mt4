@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>com.nj4x</groupId>
+        <artifactId>nj4x-mt4</artifactId>
+        <version>2.6.2</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>mt4if</artifactId>
+    <packaging>pom</packaging>
+    <name>MT4 Interface DLL</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>Compile mt4 interface dll</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.dependency.classpath" />
+
+                                <ant antfile="${project.basedir}/src/main/ant/build.xml">
+                                    <property name="project.basedir" value="${project.basedir}" />
+                                    <property name="version" value="${product}" />
+                                    <property name="devenv" value="${devenv}" />
+                                    <property name="mql" value="${mql}" />
+                                    <property name="terminal" value="${terminal}" />
+                                </ant>
+
+                                <if>
+                                    <equals arg1="${terminal}" arg2="mt5" />
+                                    <then>
+                                        <ant antfile="${project.basedir}/src/main/ant/build.xml">
+                                            <property name="project.basedir" value="${project.basedir}" />
+                                            <property name="version" value="${product}" />
+                                            <property name="devenv" value="${devenv}" />
+                                            <property name="terminal" value="mt45" />
+                                            <property name="mql" value="4" />
+                                        </ant>
+                                    </then>
+                                </if>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

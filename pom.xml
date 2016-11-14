@@ -1,0 +1,159 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.nj4x</groupId>
+    <artifactId>nj4x-mt4</artifactId>
+    <packaging>pom</packaging>
+    <version>2.6.2</version>
+
+    <name>NJ4X-MT4 Project</name>
+    <url>http://www.nj4x.com</url>
+
+    <modules>
+        <module>ea</module>
+        <module>mt4if</module>
+        <module>zero_term</module>
+        <module>nj4x-ts</module>
+        <module>jfx</module>
+        <module>nj4x</module>
+        
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <native.os>${os.name}</native.os>
+        <jzmq.version>2.1.2</jzmq.version>
+
+        
+        <zip7>C:\Program Files\7-Zip\7z.exe</zip7>
+        <devenv>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe</devenv>
+        <mstest>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\MSTest.exe</mstest>
+        <launch4j.dir>C:\Program Files (x86)\Launch4j</launch4j.dir>
+
+        <terminal>mt45</terminal>
+        <mql>4</mql>
+        <product>2.6.2</product>
+        <m />
+    </properties>
+
+    
+
+    <profiles>
+        <profile>
+            <id>Windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <native.os>Windows</native.os>
+            </properties>
+        </profile>
+        <profile>
+          <id>disable-java8-doclint</id>
+          <activation>
+            <jdk>[1.8,)</jdk>
+          </activation>
+          <properties>
+            <additionalparam>-Xdoclint:none</additionalparam>
+          </properties>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>20020829</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>nj4x-repo</id>
+            <url>file://${project.basedir}/../repository</url>
+        </repository>
+          
+    </repositories>
+
+    
+
+    <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+              <version>2.4</version>
+              <executions>
+                <execution>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>single</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.0-beta-7</version>
+                <configuration>
+                    <useReleaseProfile>false</useReleaseProfile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <attach>false</attach>
+                </configuration>
+            </plugin>
+        </plugins>
+  
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <quiet />
+                    <aggregate>true</aggregate>
+                    <doctitle>${project.name} 2.6.2 API
+                    </doctitle>
+                    <links>
+                        <link>http://www.nj4x.com</link>
+                    </links>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    
+
+</project>

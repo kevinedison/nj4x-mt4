@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>com.nj4x</groupId>
+        <artifactId>nj4x-mt4</artifactId>
+        <version>2.6.2</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>nj4x</artifactId>
+    <packaging>pom</packaging>
+    <name>NJ4X MT4 Terminal API for .Net</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>build-native</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!--taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.dependency.classpath" /-->
+
+                                <echo message="Restoring NuGet packages" />
+                                <exec dir="${project.basedir}\\src\\main\\cs" executable="nuget">
+                                    <arg line="restore" />
+                                    <arg line="nj4x.sln" /> 
+                                </exec>
+                                <echo message="Compiling nj4x.dll" />
+                                <exec dir="${project.basedir}\\src\\main\\cs" executable="${devenv}">
+                                    <arg line="${project.basedir}\\src\\main\\cs\\nj4x.sln" />
+                                    <arg line="/Build" />
+                                </exec>
+                                <waitfor>
+                                    <available file="${project.basedir}/target/nj4x.dll" />
+                                </waitfor>
+                            </target>
+                        </configuration>
+                    </execution>
+                    
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

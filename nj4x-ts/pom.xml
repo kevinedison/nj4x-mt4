@@ -1,0 +1,267 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>com.nj4x</groupId>
+        <artifactId>nj4x-mt4</artifactId>
+        <version>2.6.2</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>nj4x-ts</artifactId>
+    <packaging>jar</packaging>
+    <name>NJ4X Terminal Server</name>
+
+    <properties>
+        <out>nj4x${m}-ts-${product}</out>
+        <cxf.version>3.1.5</cxf.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+        	<groupId>net.sourceforge.nekohtml</groupId>
+        	<artifactId>nekohtml</artifactId>
+        	<version>1.9.22</version>
+        </dependency>
+        <dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>5.0.4</version>
+		</dependency>
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>forms_rt</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dropbox.core</groupId>
+            <artifactId>dropbox-core-sdk</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-netty-server</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.javassist</groupId>
+        	<artifactId>javassist</artifactId>
+        	<version>3.20.0-GA</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-jetty</artifactId>
+            <version>1.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-drive</artifactId>
+            <version>v3-rev7-1.21.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jvnet.jax-ws-commons</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <!--execution>
+                        <id>generate-client-wsdl</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>wsgen</goal>
+                        </goals>
+                        <configuration>
+                            <sei>com.jfx.ts.net.ws.TsWS</sei>
+                            <genWsdl>true</genWsdl>
+                        </configuration>
+                    </execution-->
+                    <execution>
+                        <id>generate-proxies</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlDirectory>target/generated-sources/wsdl</wsdlDirectory>
+                            <sourceDestDir>${project.basedir}/../jfx/src/main/java</sourceDestDir>
+                            <destDir>target/wsgen/classes</destDir>
+                            <packageName>com.jfx.net.tsapi</packageName>
+                            <xnocompile>true</xnocompile>
+                            <vmArgs>
+                                <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+                            </vmArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals><goal>add-source</goal></goals>
+                        <configuration>
+                            <sources>
+                                <source>../jfx/src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.6</version>
+				<configuration>
+				<!-- put your configurations here -->
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*</exclude>
+										<exclude>LICENSE.txt</exclude>
+										<exclude>NOTICE.txt</exclude>
+										<exclude>CHANGES</exclude>
+										<exclude>README</exclude>
+										<exclude>builddef.lst</exclude>
+										<!--  clutter not needed in jar  -->
+										<exclude>resources/grib1/nasa/README*.pdf</exclude>
+										<exclude>resources/grib1/**/readme*.txt</exclude>
+										<exclude>resources/grib2/**/readme*.txt</exclude>
+										<!--
+										 TIKA-763: Workaround to avoid including LGPL classes 
+										-->
+										<exclude>ucar/nc2/iosp/fysat/Fysat*.class</exclude>
+										<exclude>ucar/nc2/dataset/transform/VOceanSG1*class</exclude>
+										<exclude>ucar/unidata/geoloc/vertical/OceanSG*.class</exclude>
+										</excludes>
+								</filter>
+							</filters>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+								
+								<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+									<resource>META-INF/LICENSE</resource>
+									<file>target/classes/META-INF/LICENSE</file>
+								</transformer>
+								 
+								<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+									<resource>META-INF/NOTICE</resource>
+									<file>target/classes/META-INF/NOTICE</file>
+								</transformer>
+								 
+								<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+									<resource>META-INF/DEPENDENCIES</resource>
+									<file>target/classes/META-INF/DEPENDENCIES</file>
+								</transformer>
+								 
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/cxf/bus-extensions.txt</resource>
+								</transformer>
+								
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								  <mainClass>com.jfx.ts.net.TerminalServer</mainClass>
+								</transformer>
+							</transformers>
+						 
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>pack exe</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.dependency.classpath" />
+
+                                <if>
+                                    <available file="${launch4j.dir}/launch4j.jar" />
+                                    <then>
+                                		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+
+                                        <script language="javascript">
+                                            var pv = project.getProperty("product");
+                                            var ix = pv.search("-SNAPSHOT");
+                                            if (ix &gt; 0) {
+                                                pv = pv.substring(0, ix) + pv.substring(ix + 9);
+                                            }
+                                            ix = pv.search("-P");
+                                            if (ix &gt; 0) {
+                                                project.setProperty("2.6.2.no_snapshot", pv.substring(0, ix));
+                                            } else {
+                                                project.setProperty("2.6.2.no_snapshot", pv );
+                                            }
+                                        </script>
+
+                                        <copy file="${project.basedir}/target/${artifactId}-${version}.jar" tofile="${project.basedir}/target/${out}.jar" failonerror="false" quiet="true"/>
+
+                                		<launch4j>
+                                			<config headerType="gui" stayAlive="true" jar="${project.basedir}/target/${out}.jar" outfile="${project.basedir}/target/${out}.exe" errTitle="NJ4X Terminal Server" chdir="." icon="${project.basedir}/src/main/resources/favicon.ico">
+                                				<singleInstance mutexName="NJ4X Terminal Server" />
+                                				<jre minVersion="1.7.0" maxHeapSize="1024" runtimeBits="64/32" />                       
+                                                <splash file="${project.basedir}/src/main/resources/night_sky.bmp" waitForWindow="false" timeoutErr="false" timeout="5" />
+                                                <versionInfo fileVersion="${2.6.2.no_snapshot}.0" txtFileVersion="${product}" fileDescription="NJ4X Terminal Server" copyright="Copyright (c) 2008-2015 by Gerasimenko Roman" productVersion="${2.6.2.no_snapshot}.0" txtProductVersion="${product}" productName="NJ4X Terminal Server" companyName="NJ4M Ltd." internalName="NJ4X-TS" originalFilename="${out}.exe" />
+                                			</config>
+                                		</launch4j>
+                                    </then>
+                                </if>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>ideauidesigner-maven-plugin</artifactId>
+                <version>1.0-beta-1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javac2</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <fork>true</fork>
+                    <debug>true</debug>
+                    <failOnError>true</failOnError>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

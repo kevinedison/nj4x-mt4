@@ -1,0 +1,5 @@
+; box_utils.def : Declares the module parameters for the DLL.
+
+LIBRARY box_utils
+
+EXPORTS Java_com_jfx_ts_io_BoxUtils_boxid

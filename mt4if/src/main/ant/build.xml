@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="EA" default="build" basedir=".">
+
+    <target name="build" description="Build EA">
+        <property name="DLL" value="${project.basedir}/target/res/${terminal}if.dll" />
+        <property name="DLL-XP" value="${project.basedir}/target/res/${terminal}if_xp.dll" />
+
+        <replace dir="${project.basedir}/src/main/c++/${terminal}">
+          <include name="box_id.h" />
+          <replacetoken><![CDATA[#define USE_MT4_THREADS]]></replacetoken>
+          <replacevalue><![CDATA[//#define USE_MT4_THREADS]]></replacevalue>
+        </replace>
+        <replace dir="${project.basedir}/src/main/c++/${terminal}">
+          <include name="box_id.h" />
+          <replacetoken><![CDATA[#define SMART_SOCKET]]></replacetoken>
+          <replacevalue><![CDATA[//#define SMART_SOCKET]]></replacevalue>
+        </replace>
+
+        <delete file="${project.basedir}/target/${terminal}if.dll" quiet="true" />
+        <delete file="${project.basedir}/../zero_term/src/${terminal}/MQL${mql}/Libraries/${terminal}if_xp.dll" quiet="true" />
+        <delete file="${project.basedir}/../zero_term/src/${terminal}/experts/libraries/${terminal}if_xp.dll" quiet="true" />
+        <delete file="${project.basedir}/../jfx/etc/examples/experts/libraries/${terminal}if_xp.dll" quiet="true" />
+
+        <exec dir="${project.basedir}\\src\\main\\c++\\${terminal}" executable="${devenv}">
+            <arg line="${project.basedir}\\src\\main\\c++\\${terminal}\\${terminal}if.sln" />
+            <arg line="/Build" />
+            <arg line="Release" />
+        </exec>
+        <waitfor>
+            <available file="${project.basedir}/target/${terminal}if.dll" />
+        </waitfor>
+
+        <mkdir dir="${project.basedir}/target/res" />
+        
+        <copy file="${project.basedir}/target/${terminal}if.dll" tofile="${DLL-XP}" overwrite="true" />
+            
+        <if>
+            <equals arg1="${terminal}" arg2="mt4" />
+            <then>
+                <copy file="${DLL-XP}" todir="${project.basedir}/../zero_term/src/${terminal}/experts/libraries" overwrite="true" />
+            </then>
+            <else>
+                <copy file="${DLL-XP}" todir="${project.basedir}/../zero_term/src/${terminal}/MQL${mql}/Libraries" overwrite="true" />
+            </else>
+        </if>
+        <copy file="${DLL-XP}" todir="${project.basedir}/../jfx/etc/examples/experts/libraries" overwrite="true" />
+
+        <replace dir="${project.basedir}/src/main/c++/${terminal}">
+          <include name="box_id.h" />
+          <replacetoken><![CDATA[//#define USE_MT4_THREADS]]></replacetoken>
+          <replacevalue><![CDATA[#define USE_MT4_THREADS]]></replacevalue>
+        </replace>
+        <replace dir="${project.basedir}/src/main/c++/${terminal}">
+          <include name="box_id.h" />
+          <replacetoken><![CDATA[//#define SMART_SOCKET]]></replacetoken>
+          <replacevalue><![CDATA[#define SMART_SOCKET]]></replacevalue>
+        </replace>
+
+        <delete file="${project.basedir}/target/${terminal}if.dll" quiet="true" />
+        <delete file="${project.basedir}/../zero_term/src/${terminal}/MQL${mql}/Libraries/${terminal}if.dll" quiet="true" />
+        <delete file="${project.basedir}/../zero_term/src/${terminal}/experts/libraries/${terminal}if.dll" quiet="true" />
+        <delete file="${project.basedir}/../jfx/etc/examples/experts/libraries/${terminal}if.dll" quiet="true" />
+
+        <exec dir="${project.basedir}\\src\\main\\c++\\${terminal}" executable="${devenv}">
+            <arg line="${project.basedir}\\src\\main\\c++\\${terminal}\\${terminal}if.sln" />
+            <arg line="/Build" />
+            <arg line="Release" />
+        </exec>
+        <waitfor>
+            <available file="${project.basedir}/target/${terminal}if.dll" />
+        </waitfor>
+                                            
+        <copy file="${project.basedir}/target/${terminal}if.dll" tofile="${DLL}" overwrite="true" />
+
+        <if>
+            <equals arg1="${terminal}" arg2="mt4" />
+            <then>
+                <copy file="${DLL}" todir="${project.basedir}/../zero_term/src/${terminal}/experts/libraries" overwrite="true" />
+            </then>
+            <else>
+                <copy file="${DLL}" todir="${project.basedir}/../zero_term/src/${terminal}/MQL${mql}/Libraries" overwrite="true" />
+            </else>
+        </if>
+        <copy file="${DLL}" todir="${project.basedir}/../jfx/etc/examples/experts/libraries" overwrite="true" />
+    </target>
+
+</project>

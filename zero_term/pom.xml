@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>com.nj4x</groupId>
+        <artifactId>nj4x-mt4</artifactId>
+        <version>2.6.2</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>zero_term</artifactId>
+    <packaging>pom</packaging>
+    <name>Zero Terminal</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>build zero term</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.dependency.classpath" />
+
+                                <if>
+                                    <equals arg1="${terminal}" arg2="mt5" />
+                                    <then>
+                                        <property name="zero_term" value="basic_trader/zero_term_mt5" />
+                                    </then>
+                                    <else>
+                                        <property name="zero_term" value="basic_trader/zero_term" />
+                                    </else>
+                                </if>
+
+                                <zip zipfile="${project.basedir}/target/srv.zip">
+                                    <zipfileset dir="${project.basedir}/src">
+                                        <include name="srv/*.srv" />
+                                        <include name="ea/*" />
+                                        <include name="chr/*" />
+                                    </zipfileset>
+                                </zip>
+
+                                <mkdir dir="${project.basedir}/target/${zero_term}" />
+                                <copy todir="${project.basedir}/target/${zero_term}">
+                                    <fileset dir="${project.basedir}/src/${terminal}">
+                                        <include name="**/*" />
+                                        <exclude name="**/CVS/**" />
+                                        <exclude name="**/.svn/**" />
+                                    </fileset>
+                                </copy>
+
+                                <if>
+                                    <equals arg1="${terminal}" arg2="mt5" />
+                                    <then>
+                                        <mkdir dir="${project.basedir}/target/basic_trader/zero_term" />
+                                        <copy todir="${project.basedir}/target/basic_trader/zero_term">
+                                            <fileset dir="${project.basedir}/src/mt45">
+                                                <include name="**/*" />
+                                                <exclude name="**/CVS/**" />
+                                                <exclude name="**/.svn/**" />
+                                            </fileset>
+                                        </copy>
+                                    </then>
+                                </if>
+
+                                <exec executable="${zip7}" dir="${project.basedir}/target/basic_trader">  
+                                    <arg value="a" />
+                                    <arg line="-mx9 -tzip ${project.basedir}/target/basic_trader.zip *" />
+                                </exec>
+
+                                <copy file="${project.basedir}/target/srv.zip" todir="${project.basedir}/../nj4x-ts/src/main/resources/com/jfx/ts/net/resources" overwrite="true" />
+                                <copy file="${project.basedir}/target/basic_trader.zip" todir="${project.basedir}/../nj4x-ts/src/main/resources/com/jfx/ts/net/resources" overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

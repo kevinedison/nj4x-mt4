@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="EA" default="build" basedir=".">
+
+    <target name="build" description="Build EA">
+        <property name="EX4" value="${project.basedir}/target/jfx.ex${mql}" />
+
+        <delete file="${EX4}" quiet="true" />
+        <copy todir="${project.basedir}/target" overwrite="true" >
+            <fileset dir="${project.basedir}/src/main/mql/${terminal}">
+                <include name="*.mq*" />
+            </fileset>
+        </copy>
+        <replace dir="${project.basedir}/target" value="JFX Version project.version">
+          <include name="*.mq*" />
+          <replacetoken>JFX Version 0.0.0</replacetoken>
+        </replace>
+
+        <exec dir="${project.basedir}/target" executable="${project.basedir}/bin/${terminal}/metalang.exe">
+            <arg line="jfx.mq${mql}" />
+        </exec>
+        <waitfor>
+            <available file="${EX4}" />
+        </waitfor>
+
+        <if>
+            <equals arg1="${terminal}" arg2="mt4" />
+            <then>
+                <copy file="${EX4}" todir="${project.basedir}/../zero_term/src/${terminal}/experts" overwrite="true" />
+            </then>
+            <else>
+                <copy file="${EX4}" todir="${project.basedir}/../zero_term/src/${terminal}/MQL${mql}/Experts" overwrite="true" />
+            </else>
+        </if>
+        <copy file="${EX4}" todir="${project.basedir}/../jfx/src/main/examples/experts" overwrite="true" />
+
+    </target>
+
+</project>

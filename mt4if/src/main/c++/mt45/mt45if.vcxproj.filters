@@ -1,0 +1,470 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\net">
+      <UniqueIdentifier>{10affcc7-d835-4f41-9033-0baef6ffdf2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Source Files\jvm">
+      <UniqueIdentifier>{ce13cef1-5db4-4a59-bd3c-ab2f18f2e188}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\net\ty">
+      <UniqueIdentifier>{27ab9f67-60b5-448b-b3e0-3b4ec0974ea1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ty">
+      <UniqueIdentifier>{b2b0d96a-2dbf-4439-aa2d-c7b6141804f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\net\ty\sockets">
+      <UniqueIdentifier>{89d351ca-a261-4355-84cf-96abe1c7d130}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ty\sockets">
+      <UniqueIdentifier>{83ca8bc0-738b-4731-925e-185848b0c9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dv">
+      <UniqueIdentifier>{335702e2-63df-4ac3-aa62-651215294e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dv\Common">
+      <UniqueIdentifier>{3f765bc0-b8e8-41c8-a563-ef3a415b9e14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dv">
+      <UniqueIdentifier>{5db6fea2-5e2c-41b2-b9c6-ec5af56fdffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dv\Common">
+      <UniqueIdentifier>{3c5f3ece-fd0e-4b00-a7d7-8309638c4e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dv\UDis86">
+      <UniqueIdentifier>{8ef027fd-960b-45f1-bff0-ec36999ea5a6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="box_id.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mt45if.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="net\Client.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\SocketConnection.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="jvm\MyJvm.cpp">
+      <Filter>Source Files\jvm</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\MTClientSocket.cpp">
+      <Filter>Source Files\net\ty</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\MTMgmtSocket.cpp">
+      <Filter>Source Files\net\ty</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\MgmtHandlerThread.cpp">
+      <Filter>Source Files\net\ty</Filter>
+    </ClCompile>
+    <ClCompile Include="net\csocket.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Base64.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Debug.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Exception.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Ipv4Address.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Ipv6Address.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Lock.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Mutex.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Parse.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Semaphore.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Socket.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\socket_include.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\SocketHandler.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\SocketHandlerThread.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\SocketThread.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\StdoutLog.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\StreamSocket.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\TcpSocket.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Thread.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\sockets\Utility.cpp">
+      <Filter>Source Files\net\ty\sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\Debug.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\DynamicAPIs.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\EngBaseObj.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\FnvHash.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\MemoryManager.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\MemoryManagerPool.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\MemoryManagerTracker.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\NtInternals.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\ProcessHandle.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\RegistrySettings.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\StringLiteW.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\Threads.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\Tools.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Common\WaitableObjects.cpp">
+      <Filter>Source Files\dv\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\HookEngineMini.cpp">
+      <Filter>Source Files\dv</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\HookEngineMiscHelpers.cpp">
+      <Filter>Source Files\dv</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\ThreadSuspend.cpp">
+      <Filter>Source Files\dv</Filter>
+    </ClCompile>
+    <ClCompile Include="dv\Hooks.cpp">
+      <Filter>Source Files\dv</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ty\EA.cpp">
+      <Filter>Source Files\net\ty</Filter>
+    </ClCompile>
+    <ClCompile Include="base91.cpp">
+      <Filter>Source Files\net\ty</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="mt45if.def">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="box_id.h">
+      <Filter>Source Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\Client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mql.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="net\SocketConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="net\Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jvm\MyJvm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\MTClientSocket.h">
+      <Filter>Header Files\ty</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\MTMgmtSocket.h">
+      <Filter>Header Files\ty</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\MgmtHandlerThread.h">
+      <Filter>Header Files\ty</Filter>
+    </ClInclude>
+    <ClInclude Include="net\csocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Base64.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Debug.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Exception.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Ipv4Address.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Ipv6Address.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\ISocketHandler.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\ListenSocket.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Lock.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Mutex.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Parse.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Semaphore.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Socket.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\socket_include.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\SocketAddress.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\SocketHandler.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\SocketHandlerThread.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\sockets-config.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\SocketThread.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\StdLog.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\StdoutLog.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\StreamSocket.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\TcpSocket.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Thread.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\Utility.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\IMutex.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\sockets\IFile.h">
+      <Filter>Header Files\ty\sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\HookEngineMiscHelpers.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\ThreadSuspend.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\Debug.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\DynamicAPIs.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\EngBaseObj.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\FnvHash.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\MemoryManager.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\MemoryManagerPool.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\MemoryManagerTracker.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\NtInternals.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\ProcessHandle.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\RegistrySettings.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\StringLiteW.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\Threads.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\Tools.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\WaitableObjects.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\AgentCommon.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\ArrayList.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\AutoPtr.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\ComPtr.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\EngDefines.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\EngErrorCodes.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\EnumeratorBase.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\functionparamscache.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\LinkedList.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\MemoryManagerObjects.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\ParamsEnum.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\ProcessMemory.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\transportcommon.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\Database.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\DbObject.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\MiscEnums.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\Param.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\ModulesEnum.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\Process.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\Module.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\ExportedFunction.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Common\ExportedFunctionsEnum.h">
+      <Filter>Header Files\dv\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Agent.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\DevComActCtx.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\HookEngine.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\HookEngineCallDataEntry.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\HookEngineInternals.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\TlsData.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\Hooks.h">
+      <Filter>Header Files\dv</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\BlockingQueue.h">
+      <Filter>Header Files\ty</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ty\EA.h">
+      <Filter>Header Files\ty</Filter>
+    </ClInclude>
+    <ClInclude Include="dv\UDis86\GetInstructionLength.h">
+      <Filter>Header Files\dv\UDis86</Filter>
+    </ClInclude>
+    <ClInclude Include="base91.h">
+      <Filter>Header Files\ty</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
