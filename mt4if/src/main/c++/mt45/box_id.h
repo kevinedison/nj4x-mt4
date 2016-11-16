@@ -40,8 +40,8 @@
 #ifndef BOX_ID_H_
 #define BOX_ID_H_
 
-#define USE_MT4_THREADS
-#define SMART_SOCKET
+//////#define USE_MT4_THREADS
+//////#define SMART_SOCKET
 
 // Id.cpp : Defines the entry point for the console application.
 //
