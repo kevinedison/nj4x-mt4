@@ -35,11 +35,26 @@ import java.util.concurrent.ThreadFactory;
  * 这个是主函数，是入口函数
  */
 public class TerminalServer {
+    /**
+     * The constant MINIMUM_CLIENT_VERSION.
+     */
     public static final String MINIMUM_CLIENT_VERSION = "2.4.0";
+    /**
+     * The constant CACHED_THREAD_POOL.
+     */
     public static final ExecutorService CACHED_THREAD_POOL = Executors.newCachedThreadPool(new CachedThreadFactory("NJ4X Services #"));
-    //    public static final ExecutorService CACHED_THREAD_POOL = EfficientThreadPoolExecutor.get(16, 128, 10, TimeUnit.SECONDS, 256, "NJ4X Services #");
+    /**
+     * The constant AVAILABLE_PROCESSORS.
+     */
+//    public static final ExecutorService CACHED_THREAD_POOL = EfficientThreadPoolExecutor.get(16, 128, 10, TimeUnit.SECONDS, 256, "NJ4X Services #");
     public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
+    /**
+     * The constant MAX_TERMINAL_STARTUP_THREADS.
+     */
     public static int MAX_TERMINAL_STARTUP_THREADS;// = Integer.parseInt(System.getProperty("max_terminal_connection_threads", "" + (AVAILABLE_PROCESSORS > 3 ? Math.max(AVAILABLE_PROCESSORS - 2, AVAILABLE_PROCESSORS / 2) : AVAILABLE_PROCESSORS)));
+    /**
+     * The constant FIXED_THREAD_POOL.
+     */
     public static ExecutorService FIXED_THREAD_POOL;/* = Executors.newFixedThreadPool(MAX_TERMINAL_STARTUP_THREADS,
             new ThreadFactory() {
                 private volatile int cnt = 0;
@@ -49,6 +64,9 @@ public class TerminalServer {
                     return new Thread(r, "NJ4X Fixed (" + MAX_TERMINAL_STARTUP_THREADS + ") Pool (#" + (++cnt) + ")");
                 }
             });*/
+    /**
+     * The constant IS_DEPLOY_EA_WS.
+     */
     public static boolean IS_DEPLOY_EA_WS;
     private static TS ts;
     private static HttpServer httpServer;
@@ -59,6 +77,13 @@ public class TerminalServer {
         System.setProperty("io.netty.epollBugWorkaround", "true");
     }
 
+    /**
+     * Stop service.
+     *
+     * @param args the args
+     *
+     * @exception IOException the io exception
+     */
     public static void stopService(String[] args) throws IOException {
 /*
         if (args.length % 2 == 0) {
@@ -79,13 +104,20 @@ public class TerminalServer {
         System.exit(0);
     }
 
+    /**
+     * 客户端的入口函数
+     *
+     * @param args the input arguments
+     *
+     * @exception Exception the exception
+     */
     public static void main(String[] args) throws Exception {
         try {
             if (args.length % 2 == 0) {
                 for (int i = 0; i < args.length; i++) {
                     String pn = args[i++];
                     String pv = args[i];
-                    System.setProperty(pn, pv);
+                    System.setProperty(pn, pv);   //指定系统的全局变量，但是不知道是干嘛的
                 }
             }
             //
@@ -93,26 +125,29 @@ public class TerminalServer {
             //
             boolean asAdministrator = false;
             try {
-                LibrariesUtil.initEmbeddedLibraries();
-                asAdministrator = PSUtils.asAdministrator();
+                LibrariesUtil.initEmbeddedLibraries();   //加载PSUtils_x64.dll这个库，具体这个库是干嘛的还不知道
+                asAdministrator = PSUtils.asAdministrator();   //判断是不是以管理员身份运行的，其目的还不知道
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
             // *********************************************************************
             //
             //
-            if (TS.P_USE_MSTSC && TS.canNotUseMstsc(args)) {
+            if (TS.P_USE_MSTSC && TS.canNotUseMstsc(args)) {       //貌似是远程的问题
                 throw new RuntimeException("Can not run in MSTSC mode.");
             }
             //
             //
             // *********************************************************************
             //
+            //最大连接数线程数
             MAX_TERMINAL_STARTUP_THREADS = Integer.parseInt(System.getProperty("max_terminal_connection_threads", "" +
                     (AVAILABLE_PROCESSORS >= 24 ? AVAILABLE_PROCESSORS / 2
                             : (AVAILABLE_PROCESSORS >= 12 ? AVAILABLE_PROCESSORS / 3
                             : (AVAILABLE_PROCESSORS > 3 ? AVAILABLE_PROCESSORS - 2
                             : AVAILABLE_PROCESSORS)))));
+            //构建一个线程池
+            //newFixedThreadPool内部有个任务队列，假设线程池里有3个线程，提交了5个任务，那么后两个任务就放在任务队列了，即使前3个任务sleep或者堵塞了，也不会执行后两个任务，除非前三个任务有执行完的
             FIXED_THREAD_POOL = Executors.newFixedThreadPool(MAX_TERMINAL_STARTUP_THREADS,
                     new ThreadFactory() {
                         private volatile int cnt = 0;
@@ -148,6 +183,11 @@ public class TerminalServer {
         Thread.sleep(10000);
     }
 
+    /**
+     * Display unexpected error.
+     *
+     * @param e the e
+     */
     public static void displayUnexpectedError(Throwable e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -184,6 +224,13 @@ public class TerminalServer {
         }
     }
 
+    /**
+     * 部署函数
+     *
+     * @param _port the port
+     *
+     * @exception Exception the exception
+     */
     public static void deploy(String _port) throws Exception {
         Logger logger = TS.LOGGER;
         //
@@ -219,7 +266,7 @@ public class TerminalServer {
         //
         ts = new TS(_port);
         //
-        String host = System.getProperty("ws_host", "0.0.0.0");
+        String host = System.getProperty("ws_host", "0.0.0.0");  //目前还不知道ws是干嘛的
         int port = (System.getProperty("ws_port") == null ? 1 : 0) + Integer.parseInt(System.getProperty("ws_port", ts.getPortAsString()));
         System.setProperty("nj4x_server_host", "127.0.0.1");
         System.setProperty("nj4x_server_port", String.valueOf(Integer.parseInt(_port) + 4));
@@ -278,6 +325,13 @@ public class TerminalServer {
         }
     }
 
+    /**
+     * Deploy ea ws boolean.
+     *
+     * @param deploy the deploy
+     *
+     * @return the boolean
+     */
     public static boolean deployEaWs(boolean deploy) {
         if (deploy) {
             if (IS_DEPLOY_EA_WS && !eaWsDeployed) {
@@ -313,6 +367,9 @@ public class TerminalServer {
     }
 
     private static class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
+        /**
+         * The Logger.
+         */
         Logger logger = TS.LOGGER;
 
         public Set<QName> getHeaders() {

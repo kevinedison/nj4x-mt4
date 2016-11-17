@@ -7,9 +7,21 @@ import java.net.URL;
  * Created by roman on 13.08.2015.
  */
 public class LibrariesUtil {
+    /**
+     * The constant IS_OK.
+     */
     public static boolean IS_OK = false;
+    /**
+     * The constant isWindows.
+     */
     public static boolean isWindows;
+    /**
+     * The constant isX64.
+     */
     public static boolean isX64;
+    /**
+     * The constant LIBS_DIR.
+     */
     public static String LIBS_DIR;
 
     static {
@@ -21,6 +33,11 @@ public class LibrariesUtil {
 //        LIBS_DIR = System.getProperty("user.dir");
     }
 
+    /**
+     * 加载PSUtils_x64.dll这个库
+     *
+     * @exception IOException the io exception
+     */
     public static void initEmbeddedLibraries() throws IOException {
         String dllFileName;
         if (isX64) {
@@ -47,11 +64,11 @@ public class LibrariesUtil {
             int len;
             byte[] buffer = new byte[160000];
             while ((len = in.read(buffer)) > -1)
-                out.write(buffer, 0, len);
+                out.write(buffer, 0, len);  //不知道写这个干嘛
             out.close();
             in.close();
             //
-            System.load(libFile.getAbsolutePath());
+             System.load(libFile.getAbsolutePath());
             IS_OK = true;
         } // nativeLibraryUrl exists
     }

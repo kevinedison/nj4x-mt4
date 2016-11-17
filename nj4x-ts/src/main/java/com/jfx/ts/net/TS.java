@@ -73,28 +73,85 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
  */
 @SuppressWarnings({"SpellCheckingInspection", "ResultOfMethodCallIgnored", "Convert2Diamond"})
 public class TS {
+    /**
+     * The Version.
+     */
     static final String version = "2.6.2";
+    /**
+     * The constant NJ4X.
+     */
     public static final String NJ4X = version;
+    /**
+     * The constant NJ4X_UUID.
+     */
     public static final String NJ4X_UUID = "29a50980516c";
 
+    /**
+     * The constant SPCH.
+     */
     public static final String SPCH = "SPCH";
+    /**
+     * The constant BUILD_MT4.
+     */
     public static final String BUILD_MT4 = "950";
+    /**
+     * The constant BUILD_MT5.
+     */
     public static final String BUILD_MT5 = "1150";
 
+    /**
+     * The constant REMOTE_DESKTOP_USERS.
+     */
     public static final String REMOTE_DESKTOP_USERS = "Remote Desktop Users";
+    /**
+     * The constant ADMINISTRATORS.
+     */
     public static final String ADMINISTRATORS = "Administrators";
+    /**
+     * The constant USERS.
+     */
     public static final String USERS = "Users";
+    /**
+     * The constant P_RAN_AS_SERVICE.
+     */
     public static final boolean P_RAN_AS_SERVICE = System.getProperty("ran_as_service", "false").equals("true");
+    /**
+     * The constant P_START_GUI.
+     */
     public static final boolean P_START_GUI = System.getProperty("start_gui", "true").equals("true");
+    /**
+     * 貌似是只是用GUI模式，待核实
+     */
     public static boolean P_GUI_ONLY = System.getProperty("gui_only", "false").equals("true");
+    /**
+     * The constant P_USE_MSTSC.
+     */
     public static boolean P_USE_MSTSC = System.getProperty("use_mstsc", "false").equals("true") && BoxUtils.BOXID == 0;
+    /**
+     * The P mstsc port.
+     */
     static final String P_MSTSC_PORT = System.getProperty("mstsc_port", "3389");
-    //
+    /**
+     * The constant MIN_DISK_SPACE_GB.
+     */
+//
     public static String MIN_DISK_SPACE_GB = System.getProperty("min_disk_space_gb", "1");
+    /**
+     * The constant MAX_TERMS.
+     */
     public static final int MAX_TERMS = version.startsWith("2.0.2") ? 160 : 32;
 
+    /**
+     * The Jfx term idle tmout seconds.
+     */
     static final long JFX_TERM_IDLE_TMOUT_SECONDS;
+    /**
+     * The constant JFX_HOME.
+     */
     public static final String JFX_HOME;
+    /**
+     * The constant hostname.
+     */
     public static String hostname;
 
     static {
@@ -119,18 +176,54 @@ public class TS {
         }
     }
 
+    /**
+     * The Jfx home config.
+     */
     static final String JFX_HOME_CONFIG = JFX_HOME + File.separatorChar + "config";
+    /**
+     * The Jfx home zterm dir.
+     */
     static final String JFX_HOME_ZTERM_DIR = JFX_HOME + File.separatorChar + "zero_term";
+    /**
+     * The Jfx home zterm mt 5 dir.
+     */
     static final String JFX_HOME_ZTERM_MT5_DIR = JFX_HOME + File.separatorChar + "zero_term_mt5";
+    /**
+     * The Jfx home srv dir.
+     */
     static final String JFX_HOME_SRV_DIR = JFX_HOME + File.separatorChar + "srv";
+    /**
+     * The Jfx home ea dir.
+     */
     static final String JFX_HOME_EA_DIR = JFX_HOME + File.separatorChar + "ea";
+    /**
+     * The Jfx home experts dir.
+     */
     static final String JFX_HOME_EXPERTS_DIR = JFX_HOME + File.separatorChar + "experts";
+    /**
+     * The Jfx home indicators dir.
+     */
     static final String JFX_HOME_INDICATORS_DIR = JFX_HOME + File.separatorChar + "indicators";
+    /**
+     * The Jfx home chr dir.
+     */
     static final String JFX_HOME_CHR_DIR = JFX_HOME + File.separatorChar + "chr";
+    /**
+     * The constant JMX_CONFIG_XML.
+     */
     public static final String JMX_CONFIG_XML = JFX_HOME_CONFIG + File.separatorChar + "mbean_config.xml";
+    /**
+     * The constant LOGGING_CONFIG_XML.
+     */
     public static String LOGGING_CONFIG_XML = JFX_HOME_CONFIG + File.separatorChar + (P_GUI_ONLY ? "gui_" : "") + "logging.xml";
+    /**
+     * The constant LOGGER.
+     */
     public static final Logger LOGGER;
 
+    /**
+     * The constant TERM_DIR.
+     */
     public static String TERM_DIR = null;
 
     private static TSConfig tsConfig;
@@ -239,16 +332,49 @@ public class TS {
         return null;
     }
 
+    /**
+     * The Psexesvc.
+     */
     static final String PSEXESVC = System.getenv("SystemRoot") + File.separator + "PSEXESVC.EXE";
+    /**
+     * The Mstsc.
+     */
     static final String MSTSC = System.getenv("SystemRoot") + File.separator + "system32" + File.separatorChar + "mstsc.exe";
+    /**
+     * The Net.
+     */
     static final String NET = System.getenv("SystemRoot") + File.separator + "system32" + File.separatorChar + "net.exe";
+    /**
+     * The Icacls.
+     */
     static final String ICACLS = System.getenv("SystemRoot") + File.separator + "system32" + File.separatorChar + "icacls.exe";
+    /**
+     * The Cmdkey.
+     */
     static final String CMDKEY = System.getenv("SystemRoot") + File.separator + "system32" + File.separatorChar + "cmdkey.exe";
+    /**
+     * The Quser.
+     */
     static final String QUSER = System.getenv("SystemRoot") + File.separator + "system32" + File.separatorChar + "quser.exe";
+    /**
+     * The Reg.
+     */
     static final String REG = System.getenv("SystemRoot") + File.separator + "system32" + File.separatorChar + "reg.exe";
+    /**
+     * The Wmic.
+     */
     static final String WMIC = System.getenv("SystemRoot") + File.separator + "system32" + File.separator + "wbem" + File.separatorChar + "WMIC.exe";
+    /**
+     * The Use paexec.
+     */
     static final boolean USE_PAEXEC = System.getProperty("use_paexec", "false").equals("true");
+    /**
+     * The Psexec.
+     */
     static final String PSEXEC = "\"" + System.getProperty("user.dir") + File.separator + (USE_PAEXEC ? "paexec.exe\"" : "psexec.exe\"");
+    /**
+     * The Psutils.
+     */
     static final String[] _PSUTILS = new String[]{
             PSEXEC,
             "\"" + System.getProperty("java.home") + File.separator + "bin" + File.separator + "javaw.exe\"",
@@ -257,16 +383,36 @@ public class TS {
 //            "\"" + System.getProperty("user.dir") + File.separator + ".." + File.separator + "lib" + File.separator + "jfx.jar\"",
             "com.jfx.ts.io.PSUtils"
     };
+    /**
+     * The Mstsc.
+     */
     boolean mstsc;
+    /**
+     * The Session manager.
+     */
     SessionManager sessionManager;
+    /**
+     * The Gui.
+     */
     TSConfigGUI gui;
     private ScheduledFuture<?> netstatJob;
     private ScheduledFuture<?> spaceMonitoringJob;
 
+    /**
+     * Gets session manager.
+     *
+     * @return the session manager
+     */
     public SessionManager getSessionManager() {
         return sessionManager;
     }
 
+    /**
+     * 解压交易商的信息文件srv，不清楚是不是每次都要这儿样做
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void extractResourceSrv() throws IOException {
         if (new File(JFX_HOME_SRV_DIR).exists()) {
             ZipInputStream zis = new ZipInputStream(TS.class.getResourceAsStream("/com/jfx/ts/net/resources/srv.zip"));
@@ -303,6 +449,14 @@ public class TS {
         }
     }
 
+    /**
+     * Delete directory.
+     *
+     * @param dir the dir
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void deleteDirectory(File dir) throws IOException {
         Files.walkFileTree(dir.toPath(), new FileVisitor<Path>() {
             @Override
@@ -330,12 +484,30 @@ public class TS {
         dir.delete();
     }
 
+    /**
+     * The Is win xp.
+     */
     static boolean IS_WIN_XP = System.getProperty("os.version", "-").equals("5.2")
             || System.getProperty("os.name", "-").equals("Windows XP")
             || System.getProperty("os.name", "-").equals("Windows 2003");
+    /**
+     * The Is 64 bit vm.
+     */
     static boolean IS_64BIT_VM = System.getProperty("sun.arch.data.model").equals("64");
+    /**
+     * The Is 32 bit vm.
+     */
     static boolean IS_32BIT_VM = System.getProperty("sun.arch.data.model").equals("32");
 
+    /**
+     * Copy file.
+     *
+     * @param from       the from
+     * @param toPathName the to path name
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void copyFile(File from, String toPathName) throws IOException {
         if (from != null) {
 
@@ -351,6 +523,9 @@ public class TS {
         }
     }
 
+    /**
+     * 配置云端的文件夹
+     */
     public static void initCloudDirectories() {
         GDriveAccess.getInstance().setupDownloadFolder(
                 GDriveAccess.P_SRV,    // from g-drive folder id
@@ -375,6 +550,15 @@ public class TS {
         );
     }
 
+    /**
+     * Init terminal directory from zip.
+     * zero item不知道干嘛的，将zip的文件初始化到终端的配置文件夹中，应该是MT4的程序，要配置的，这个还要看MT4的文档
+     *
+     * @param dir the dir
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void initTerminalDirectoryFromZip(String dir) throws IOException {
         ZipInputStream zis = null;
         try {
@@ -608,6 +792,13 @@ public class TS {
         }
     }
 
+    /**
+     * Is propriatory file boolean.
+     *
+     * @param pathname the pathname
+     *
+     * @return the boolean
+     */
     static boolean isPropriatoryFile(String pathname) {
         String pnLower = pathname.toLowerCase();
         String dllPrefix = pnLower.contains("zero_term_mt5") || pnLower.contains("custom_term_mt5") ? "mt5if" : "mt45if";
@@ -625,16 +816,25 @@ public class TS {
         );
     }
 
+    /**
+     * Disable live update.
+     */
     public static void disableLiveUpdate() {
         System.setProperty("disable_mt4_live_update", "true");
         amendLiveUpdates();
     }
 
+    /**
+     * Enable live update.
+     */
     public static void enableLiveUpdate() {
         System.setProperty("disable_mt4_live_update", "false");
         amendLiveUpdates();
     }
 
+    /**
+     * Amend live updates.
+     */
     static void amendLiveUpdates() {
         try {
             disableLiveUpdateIfNeeded(new File(System.getProperty("user.home").substring(0, 3) + "ProgramData\\MetaQuotes\\WebInstall\\mt5clw\\terminal.exe"));
@@ -644,6 +844,14 @@ public class TS {
         }
     }
 
+    /**
+     * Disable live update if needed.
+     *
+     * @param newTerm the new term
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void disableLiveUpdateIfNeeded(File newTerm) throws IOException {
         String mt4LiveUpdate = System.getenv().get("DISABLE_MT4_LIVE_UPDATE");
         boolean disableLiveUpdate = System.getProperty("disable_mt4_live_update", mt4LiveUpdate == null ? "true" : mt4LiveUpdate).equals("true");
@@ -665,6 +873,11 @@ public class TS {
         }
     }
 
+    /**
+     * Enable dir.
+     *
+     * @param mt4clw the mt 4 clw
+     */
     static void enableDir(File mt4clw) {
         if (mt4clw.exists() && mt4clw.isFile()) {
             mt4clw.delete();
@@ -674,6 +887,14 @@ public class TS {
         }
     }
 
+    /**
+     * Disable dir.
+     *
+     * @param metaQuotesDir the meta quotes dir
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void disableDir(File metaQuotesDir) throws IOException {
         if (metaQuotesDir.exists()) {
             if (metaQuotesDir.isDirectory()) {
@@ -694,6 +915,14 @@ public class TS {
         }
     }
 
+    /**
+     * Copy live updated terminal if needed.
+     *
+     * @param newTerm the new term
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void copyLiveUpdatedTerminalIfNeeded(File newTerm) throws IOException {
         if (newTerm.exists()) {
             if (!System.getProperty("disable_mt4_live_update", "true").equals("true")) {
@@ -742,6 +971,15 @@ public class TS {
 //        }
 //    }
 
+    /**
+     * Write file.
+     *
+     * @param fName the f name
+     * @param bytes the bytes
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static void writeFile(String fName, byte[] bytes) throws IOException {
         FileOutputStream fos = null;
         try {
@@ -754,25 +992,55 @@ public class TS {
         }
     }
 
+    /**
+     * The constant scheduledExecutorService.
+     */
     public static ScheduledExecutorService scheduledExecutorService
             = java.util.concurrent.Executors.newScheduledThreadPool(64);
+    /**
+     * The Terminations.
+     */
 //            = EfficientThreadPoolExecutor.get(16, 64, 10, TimeUnit.SECONDS, 256, "TS-schedule-");
     static Hashtable<String, ScheduledFuture> terminations;
+    /**
+     * The Sym files.
+     */
     static final HashSet<String> symFiles = new HashSet<String>();
 
     private String port;
 
+    /**
+     * Gets port as string.
+     *
+     * @return the port as string
+     */
     public String getPortAsString() {
         return port;
     }
 
+    /**
+     * Gets port.
+     *
+     * @return the port
+     */
     public int getPort() {
         return Integer.parseInt(port);
     }
 
+    /**
+     * Instantiates a new Ts.
+     */
     public TS() {
     }
 
+    /**
+     * Instantiates a new Ts.
+     *
+     * @param port the port
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public TS(String port) throws IOException {
         this.port = port;
 //        scheduledExecutorService = java.util.concurrent.Executors.newScheduledThreadPool(16);
@@ -790,17 +1058,17 @@ public class TS {
             }
             //
             try {
-                initTerminalDirectoryFromZip(JFX_HOME + File.separatorChar);
+                initTerminalDirectoryFromZip(JFX_HOME + File.separatorChar);  //配置中断的文件
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         //
-        initCloudDirectories();
+        initCloudDirectories();  //貌似是配置云端的文件夹之类的，但是不知道有什么用
         //
         if (!P_GUI_ONLY) {
             System.setProperty(JMXServer.JMX_IMPL_CLASS, JMXServer.MX4J_IMPL_CLASS);
-            System.setProperty(JMXServer.MX4J_CONFIG_XML, JMX_CONFIG_XML);
+            System.setProperty(JMXServer.MX4J_CONFIG_XML, JMX_CONFIG_XML);    //mbean.xml文件是MT4的配置文件，至少从这个上面看是的
             try {
                 JMXServer.getInstance();
             } catch (RuntimeException ignored) {
@@ -949,8 +1217,14 @@ public class TS {
 
     private static class TSConfig extends java.util.Properties {
 
+        /**
+         * The constant TS_CONFIG.
+         */
         public static final String TS_CONFIG = TS.JFX_HOME_CONFIG + "/ts_config.xml";
 
+        /**
+         * Instantiates a new Ts config.
+         */
         public TSConfig() {
             File cfgFile = new File(TS_CONFIG);
             if (cfgFile.exists()) {
@@ -980,6 +1254,11 @@ public class TS {
             }
         }
 
+        /**
+         * Remove properties.
+         *
+         * @param keys the keys
+         */
         public synchronized void removeProperties(String... keys) {
             try {
                 for (int i = 0; i < keys.length; i++) {
@@ -1009,18 +1288,42 @@ public class TS {
         }
     }
 
+    /**
+     * Sets configuration value.
+     *
+     * @param key   the key
+     * @param value the value
+     */
     public static void setConfigurationValue(String key, String value) {
         tsConfig.setProperty(key, value);
     }
 
+    /**
+     * Sets configuration values.
+     *
+     * @param kv the kv
+     */
     public static void setConfigurationValues(Map<String, String> kv) {
         tsConfig.putAll(kv);
     }
 
+    /**
+     * Remove configuration values.
+     *
+     * @param keys the keys
+     */
     public static void removeConfigurationValues(String... keys) {
         tsConfig.removeProperties(keys);
     }
 
+    /**
+     * Gets configuration value.
+     *
+     * @param key          the key
+     * @param defaultValue the default value
+     *
+     * @return the configuration value
+     */
     public static String getConfigurationValue(String key, String defaultValue) {
         return tsConfig.getProperty(key, defaultValue);
     }
@@ -1062,6 +1365,16 @@ public class TS {
         }
     }
 
+    /**
+     * Can not use mstsc boolean.
+     *
+     * @param args the args
+     *
+     * @return the boolean
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static boolean canNotUseMstsc(String[] args) throws IOException {
         if (!new File(MSTSC).exists()) {
             String message = "MSTSC mode initialization error: " + MSTSC + " not found";
@@ -1130,6 +1443,9 @@ public class TS {
         return false;
     }
 
+    /**
+     * The constant USE_NJ4X_USER.
+     */
     final static boolean USE_NJ4X_USER = false;
     private static void RunAsNj4x(String[] args) throws IOException {
         if (!USE_NJ4X_USER) return;
@@ -1179,10 +1495,33 @@ com.sun.management.jmxremote.ssl=false
         sessionManager.loadSessions().initTsUsers();
     }
 
+    /**
+     * Assert program exit code string.
+     *
+     * @param exitCode the exit code
+     * @param cmd      the cmd
+     *
+     * @return the string
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static String assertProgramExitCode(int exitCode, String... cmd) throws IOException {
         return assertProgramExitCode(exitCode, null, cmd);
     }
 
+    /**
+     * Assert program exit code string.
+     *
+     * @param exitCode    the exit code
+     * @param outListener the out listener
+     * @param cmd         the cmd
+     *
+     * @return the string
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static String assertProgramExitCode(int exitCode, LineListener outListener, String... cmd) throws IOException {
         if (Log4JUtil.isConfigured() && LOGGER.isDebugEnabled()) {
             LOGGER.debug("BEGIN: assert Program ExitCode=" + exitCode + ", cmd=" + ExternalProcess.asString(cmd));
@@ -1204,10 +1543,31 @@ com.sun.management.jmxremote.ssl=false
         return p.getOut();
     }
 
+    /**
+     * Run program get exit code int.
+     *
+     * @param cmd the cmd
+     *
+     * @return the int
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static int runProgramGetExitCode(String... cmd) throws IOException {
         return runProgramGetExitCode(0, cmd);
     }
 
+    /**
+     * Run program get exit code int.
+     *
+     * @param tmoutMillis the tmout millis
+     * @param cmd         the cmd
+     *
+     * @return the int
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static int runProgramGetExitCode(int tmoutMillis, String... cmd) throws IOException {
         try {
             return new ExternalProcess(cmd).run(tmoutMillis);
@@ -1216,10 +1576,25 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * The No net stat.
+     */
     static boolean noNetStat = System.getProperty("no_netstat", "false").equals("true");
+    /**
+     * The constant CONNECTION_TIMEOUT_MILLIS.
+     */
     public static int CONNECTION_TIMEOUT_MILLIS = Integer.parseInt(System.getProperty("conn_timeout_seconds", "120")) * 1000;
+    /**
+     * The constant NO_NETSTAT_DELAY_MILLIS.
+     */
     public static int NO_NETSTAT_DELAY_MILLIS = CONNECTION_TIMEOUT_MILLIS / 2;
+    /**
+     * The Last net stat.
+     */
     static long lastNetStat = 0;
+    /**
+     * The Net stat buffer.
+     */
     static volatile ArrayList<String> netStatBuffer = new ArrayList<String>();
 
 /*
@@ -1251,8 +1626,16 @@ com.sun.management.jmxremote.ssl=false
     }
 */
 
+    /**
+     * The Dir 2 symbols.
+     */
     final Hashtable<String, String[]> dir2symbols = new Hashtable<String, String[]>();
 
+    /**
+     * Gets term dir.
+     *
+     * @return the term dir
+     */
     public static String getTermDir() {
         if (TERM_DIR == null) {
             return getTargetTermDir();
@@ -1261,11 +1644,21 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Gets target term dir.
+     *
+     * @return the target term dir
+     */
     public static String getTargetTermDir() {
         String uh = System.getProperty("program_data_dir", P_USE_MSTSC ? "C:\\ProgramData\\nj4x" : System.getProperty("user.home"));
         return uh + "\\.jfx_terminals";
     }
 
+    /**
+     * Log.
+     *
+     * @param msg the msg
+     */
     public void log(String msg) {
         if (Log4JUtil.isConfigured()) {
             LOGGER.info(msg);
@@ -1274,6 +1667,11 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Pause.
+     *
+     * @param msg the msg
+     */
     static void pause(String msg) {
         System.out.println(msg);
         try {
@@ -1282,6 +1680,17 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Run term process get pid int.
+     *
+     * @param tp                  the tp
+     * @param terminalProcessName the terminal process name
+     * @param dir                 the dir
+     * @param runInTSSession      the run in ts session
+     * @param swHide              the sw hide
+     *
+     * @return the int
+     */
     int runTermProcessGetPID(TerminalParams tp, String terminalProcessName, String dir, boolean runInTSSession, SwHide swHide) {
         Session s = null;
         if (mstsc) {
@@ -1374,6 +1783,17 @@ com.sun.management.jmxremote.ssl=false
         return exit;
     }
 
+    /**
+     * Wmclose process boolean.
+     *
+     * @param terminalProcessName the terminal process name
+     * @param show                the show
+     *
+     * @return the boolean
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     boolean wmcloseProcess(String terminalProcessName, boolean show) throws IOException {
         int hWnd = getHWND(terminalProcessName);
         return wmcloseProcess(hWnd, terminalProcessName, show);
@@ -1400,6 +1820,13 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Gets hwnd.
+     *
+     * @param terminalProcessName the terminal process name
+     *
+     * @return the hwnd
+     */
     public int getHWND(String terminalProcessName) {
         int[] pidSessId = PSUtils.getPIDAndSessionID(terminalProcessName, P_USE_MSTSC);
         return getHWND(pidSessId);
@@ -1424,6 +1851,13 @@ com.sun.management.jmxremote.ssl=false
 */
     }
 
+    /**
+     * Toggle window visibility by pid boolean.
+     *
+     * @param pid the pid
+     *
+     * @return the boolean
+     */
     public boolean toggleWindowVisibilityByPID(int pid) {
         if (sessionManager == null || sessionManager.getSessions().size() < 2) {
             return PSUtils.toggleWindowVisibilityByPID(pid);
@@ -1433,6 +1867,14 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Sw show hide by pid boolean.
+     *
+     * @param show the show
+     * @param pid  the pid
+     *
+     * @return the boolean
+     */
     public boolean swShowHideByPID(boolean show, int pid) {
         if (sessionManager == null || sessionManager.getSessions().size() < 2) {
             return PSUtils.swShowHideByPID(show, pid);
@@ -1442,6 +1884,13 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Gets hwnd.
+     *
+     * @param pidSessId the pid sess id
+     *
+     * @return the hwnd
+     */
     public int getHWND(int[] pidSessId) {
         int pid = pidSessId[0];
         if (sessionManager == null || sessionManager.getSessions().size() < 2) {
@@ -1457,6 +1906,13 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Switch endianess byte [ ].
+     *
+     * @param a the a
+     *
+     * @return the byte [ ]
+     */
     public static byte[] switchEndianess(byte[] a) {
         for (int i = 0; i + 1 < a.length; i += 2) {
             byte b = a[i];
@@ -1466,6 +1922,14 @@ com.sun.management.jmxremote.ssl=false
         return a;
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static void main(String[] args) throws IOException {
         LibrariesUtil.initEmbeddedLibraries();
         if (args.length == 0) {
@@ -1475,6 +1939,12 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Dupm terminals ip.
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void dupmTerminalsIP() throws IOException {
         try {
             String TASKLIST = System.getenv("SystemRoot") + File.separator + "system32" + File.separatorChar + "tasklist.exe";
@@ -1541,6 +2011,12 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Kill terminals in term dir.
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     static void killTerminalsInTermDir() throws IOException {
         Files.walkFileTree(Paths.get(getTermDir()), new HashSet<FileVisitOption>(), 2, new FileVisitor<Path>() {
             @Override
@@ -1571,12 +2047,30 @@ com.sun.management.jmxremote.ssl=false
         });
     }
 
+    /**
+     * The Hwnd wm closed.
+     */
     final WeakHashMap<Integer, Boolean> hwndWmClosed = new WeakHashMap<>();
 
+    /**
+     * Kill process boolean.
+     *
+     * @param terminalProcessName the terminal process name
+     *
+     * @return the boolean
+     */
     boolean killProcess(String terminalProcessName) {
         return killProcess(terminalProcessName, false);
     }
 
+    /**
+     * Kill process boolean.
+     *
+     * @param terminalProcessName the terminal process name
+     * @param ignoreRes           the ignore res
+     *
+     * @return the boolean
+     */
     boolean killProcess(String terminalProcessName, boolean ignoreRes) {
         int[] pidSessId = PSUtils.getPIDAndSessionID(terminalProcessName, mstsc);
         int pid = pidSessId[0];
@@ -1616,6 +2110,15 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Terminate app boolean.
+     *
+     * @param pid          the pid
+     * @param tmoutMillis  the tmout millis
+     * @param debugEnabled the debug enabled
+     *
+     * @return the boolean
+     */
     boolean terminateApp(int pid, int tmoutMillis, boolean debugEnabled) {
         boolean b = PSUtils.terminateApp(pid, tmoutMillis);
         if (debugEnabled) {
@@ -1657,6 +2160,13 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Kill process ungracefully boolean.
+     *
+     * @param terminalProcessName the terminal process name
+     *
+     * @return the boolean
+     */
     public boolean killProcessUngracefully(String terminalProcessName) {
         int sessId = PSUtils.killProcessGetSessionID(terminalProcessName, mstsc);
         if (sessId >= 0) {
@@ -1671,6 +2181,11 @@ com.sun.management.jmxremote.ssl=false
         return false;
     }
 
+    /**
+     * Kill terminal.
+     *
+     * @param terminalProcessName the terminal process name
+     */
     public void killTerminal(String terminalProcessName) {
         while (PSUtils.isRunning(terminalProcessName)) {
             killProcess(terminalProcessName);
@@ -1685,8 +2200,18 @@ com.sun.management.jmxremote.ssl=false
     private final HashMap<Long, ClientWorker> clients = new HashMap<>();
     private long lastToken = System.currentTimeMillis();
     private Future clientsCleanerJob = null;
+    /**
+     * The constant SESSION_TIMEOUT_MILLIS.
+     */
     public static final int SESSION_TIMEOUT_MILLIS = 60000;
 
+    /**
+     * New client worker client worker.
+     *
+     * @param cInfo the c info
+     *
+     * @return the client worker
+     */
     public ClientWorker newClientWorker(Nj4xClientInfo cInfo) {
         ClientWorker cw;
         synchronized (clients) {
@@ -1725,6 +2250,19 @@ com.sun.management.jmxremote.ssl=false
         return cw;
     }
 
+    /**
+     * Gets client worker.
+     *
+     * @param token the token
+     * @param info  the info
+     *
+     * @return the client worker
+     *
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     */
     public ClientWorker getClientWorker(long token, String info) throws Nj4xInvalidTokenException, Nj4xSessionExpiredException {
         if (token > 0) {
             ClientWorker cw;
@@ -1742,6 +2280,18 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Remove client worker client worker.
+     *
+     * @param token the token
+     *
+     * @return the client worker
+     *
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     */
     public ClientWorker removeClientWorker(long token) throws Nj4xInvalidTokenException, Nj4xSessionExpiredException {
         if (token > 0) {
             ClientWorker cw;
@@ -1758,12 +2308,20 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Update terminals.
+     */
     public void updateTerminals() {
         if (sessionManager != null) {
             sessionManager.updateTerminals();
         }
     }
 
+    /**
+     * Gets terminals.
+     *
+     * @return the terminals
+     */
     public ArrayList<String> getTerminals() {
         ArrayList<String> terms = new ArrayList<>();
         for (Session s : sessionManager.getSessions()) {
@@ -1775,28 +2333,72 @@ com.sun.management.jmxremote.ssl=false
         return terms;
     }
 
+    /**
+     * The interface Managed terminal.
+     */
     public interface IManagedTerminal {
+        /**
+         * Gets module.
+         *
+         * @return the module
+         */
         String getModule();
 
+        /**
+         * Gets number of client connections.
+         *
+         * @return the number of client connections
+         */
         int getNumberOfClientConnections();
 
+        /**
+         * Is hooked boolean.
+         *
+         * @return the boolean
+         */
         boolean isHooked();
 
+        /**
+         * Transfer socket.
+         *
+         * @param cliChannelHdlr the cli channel hdlr
+         */
         void transferSocket(Object cliChannelHdlr);
     }
 
+    /**
+     * The Managed terminals registry.
+     */
     public static ConcurrentHashMap<String, IManagedTerminal> managedTerminalsRegistry = null;
 
+    /**
+     * Kill terminals.
+     */
     public void killTerminals() {
         for (String t : getTerminals()) {
             killProcessUngracefully(t);
         }
     }
 
+    /**
+     * Gets pid.
+     *
+     * @param termName the term name
+     *
+     * @return the pid
+     */
     public int getPID(String termName) {
         return getPID(termName, false);
     }
 
+    /**
+     * Gets pid.
+     *
+     * @param termName  the term name
+     * @param updatePID the update pid
+     *
+     * @return the pid
+     */
     public int getPID(String termName, boolean updatePID) {
         int pid = -1;
         if (!updatePID && sessionManager != null) {
@@ -1816,6 +2418,13 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Gets pid start time.
+     *
+     * @param pid the pid
+     *
+     * @return the pid start time
+     */
     public long getPIDStartTime(int pid) {
         Long start = null;
         if (sessionManager != null) {
@@ -2182,6 +2791,14 @@ com.sun.management.jmxremote.ssl=false
         return "CMD" + cmd;
     }
 
+    /**
+     * Gets statistics by pid.
+     *
+     * @param pid  the pid
+     * @param path the path
+     *
+     * @return the statistics by pid
+     */
     public boolean getStatisticsByPID(int pid, String path) {
         String socketLog = path.replace("terminal.exe", "logs\\stats.log");
         try {
@@ -2211,6 +2828,13 @@ com.sun.management.jmxremote.ssl=false
         return false;
     }
 
+    /**
+     * Is expert installed boolean.
+     *
+     * @param _eaName the ea name
+     *
+     * @return the boolean
+     */
     public static boolean isExpertInstalled(String _eaName) {
         String eaFileName = eaToFileName(_eaName);
         File file = new File(JFX_HOME_EXPERTS_DIR + "/" + eaFileName);
@@ -2224,6 +2848,13 @@ com.sun.management.jmxremote.ssl=false
         return false;
     }
 
+    /**
+     * Is indicator installed boolean.
+     *
+     * @param _indicatorName the indicator name
+     *
+     * @return the boolean
+     */
     public static boolean isIndicatorInstalled(String _indicatorName) {
         String indicatorFileName = indicatorToFileName(_indicatorName);
         File file = new File(JFX_HOME_INDICATORS_DIR + "/" + indicatorFileName);
@@ -2237,6 +2868,14 @@ com.sun.management.jmxremote.ssl=false
         return false;
     }
 
+    /**
+     * Gets installed experts.
+     *
+     * @return the installed experts
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static ArrayList<String> getInstalledExperts() throws IOException {
         ArrayList<String> res = new ArrayList<>();
         for(String ea : new File(JFX_HOME_EXPERTS_DIR).list()) {
@@ -2245,6 +2884,14 @@ com.sun.management.jmxremote.ssl=false
         return res;
     }
 
+    /**
+     * Gets installed indicators.
+     *
+     * @return the installed indicators
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static ArrayList<String> getInstalledIndicators() throws IOException {
         ArrayList<String> res = new ArrayList<>();
         for(String ea : new File(JFX_HOME_INDICATORS_DIR).list()) {
@@ -2266,6 +2913,15 @@ com.sun.management.jmxremote.ssl=false
         return eaFileName.endsWith(".ex4") ? eaFileName.substring(0, eaFileName.length() - 4) : eaFileName;
     }
 
+    /**
+     * Install expert.
+     *
+     * @param _eaName the ea name
+     * @param content the content
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static void installExpert(String _eaName, byte[] content) throws IOException {
         String eaFileName = eaToFileName(_eaName);
         File file = new File(JFX_HOME_EXPERTS_DIR + "/" + eaFileName);
@@ -2281,6 +2937,15 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Install indicator.
+     *
+     * @param _indicatorName the indicator name
+     * @param content        the content
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static void installIndicator(String _indicatorName, byte[] content) throws IOException {
         String iFileName = indicatorToFileName(_indicatorName);
         File file = new File(JFX_HOME_INDICATORS_DIR + "/" + iFileName);
@@ -2296,6 +2961,16 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Install expert library.
+     *
+     * @param _eaName the ea name
+     * @param libName the lib name
+     * @param content the content
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static void installExpertLibrary(String _eaName, String libName, byte[] content) throws IOException {
         String eaFileName = eaToFileName(_eaName);
         File file = new File(JFX_HOME_EXPERTS_DIR + "/" + eaFileName);
@@ -2315,6 +2990,15 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Copy expert to.
+     *
+     * @param _eaName the ea name
+     * @param termDir the term dir
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static void copyExpertTo(String _eaName, final String termDir) throws IOException {
         String eaFileName = eaToFileName(_eaName);
         final File file = new File(JFX_HOME_EXPERTS_DIR + "/" + eaFileName);
@@ -2354,6 +3038,15 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * Copy indicator to.
+     *
+     * @param _indicatorName the indicator name
+     * @param termDir        the term dir
+     *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     */
     public static void copyIndicatorTo(String _indicatorName, final String termDir) throws IOException {
         String indicatorFileName = indicatorToFileName(_indicatorName);
         final File file = new File(JFX_HOME_INDICATORS_DIR + "/" + indicatorFileName);
@@ -2393,12 +3086,29 @@ com.sun.management.jmxremote.ssl=false
         }
     }
 
+    /**
+     * The type Mt 4 module.
+     */
     public static class Mt4Module {
         private final String passwordHash;
+        /**
+         * The Is check required.
+         */
         public boolean isCheckRequired = true;
+        /**
+         * The Module.
+         */
         public final String module;
+        /**
+         * The Check future.
+         */
         public ScheduledFuture<?> checkFuture;
 
+        /**
+         * Instantiates a new Mt 4 module.
+         *
+         * @param tp the tp
+         */
         public Mt4Module(TerminalParams tp) {
             module = tp.getTerminalProcessFullPathName();
             passwordHash = MD5.MD5(tp.pass);
@@ -2408,6 +3118,15 @@ com.sun.management.jmxremote.ssl=false
     private static ConcurrentHashMap<String, Mt4Module> modulePassword = new ConcurrentHashMap<>(); // module -> passwdHash
     private static ConcurrentHashMap<String, Mt4Module> incomingConnectionModule = new ConcurrentHashMap<>(); // conn_id -> module
     private static ConcurrentHashMap<String, String> incomingConnectionError = new ConcurrentHashMap<>(); // conn_id -> error
+
+    /**
+     * Register incoming connection module 0 string.
+     *
+     * @param tp           the tp
+     * @param clientWorker the client worker
+     *
+     * @return the string
+     */
     public static String registerIncomingConnectionModule0(final TerminalParams tp, final ClientWorker clientWorker) {
         boolean isRunning = false;
         if (tp.isNj4xParams()) {
@@ -2428,6 +3147,14 @@ com.sun.management.jmxremote.ssl=false
         return isRunning ? "OK, running" : "OK, started";
     }
 
+    /**
+     * Register incoming connection module 1 string.
+     *
+     * @param tp           the tp
+     * @param clientWorker the client worker
+     *
+     * @return the string
+     */
     public static String registerIncomingConnectionModule1(final TerminalParams tp, final ClientWorker clientWorker) {
         if (tp.isNj4xParams()) {
             Mt4Module mt4Module = modulePassword.get(tp.getTerminalProcessFullPathName());
@@ -2479,6 +3206,15 @@ com.sun.management.jmxremote.ssl=false
         return "OK, started";
     }
 
+    /**
+     * Register incoming connection module string.
+     *
+     * @param tp           the tp
+     * @param clientWorker the client worker
+     * @param isRunning    the is running
+     *
+     * @return the string
+     */
     public static String registerIncomingConnectionModule(final TerminalParams tp, final ClientWorker clientWorker, boolean isRunning) {
         if (tp.isNj4xParams()) {
             Mt4Module mt4Module = new Mt4Module(tp);
@@ -2542,24 +3278,52 @@ com.sun.management.jmxremote.ssl=false
         return isRunning ? "OK, running" : "OK, started";
     }
 
-    // module -> okPasswordHash
+    /**
+     * Unregister incoming connection module.
+     *
+     * @param strategy      the strategy
+     * @param isTransferred the is transferred
+     */
+// module -> okPasswordHash
     public static void unregisterIncomingConnectionModule(String strategy, boolean isTransferred) {
         incomingConnectionModule.remove(strategy);
         incomingConnectionError.remove(strategy);
     }
 
+    /**
+     * Gets incoming connection module.
+     *
+     * @param strategy the strategy
+     *
+     * @return the incoming connection module
+     */
     public static Mt4Module getIncomingConnectionModule(String strategy) {
         return incomingConnectionModule.get(strategy);
     }
 
+    /**
+     * Check incoming connection error string.
+     *
+     * @param strategy the strategy
+     *
+     * @return the string
+     */
     public static String checkIncomingConnectionError(String strategy) {
         return incomingConnectionError.get(strategy);
     }
 
     private static class SearchFilePathVisitor implements FileVisitor<Path> {
+        /**
+         * The File found.
+         */
         public File fileFound = null;
         private String selectedFileName;
 
+        /**
+         * Instantiates a new Search file path visitor.
+         *
+         * @param selectedFileName the selected file name
+         */
         public SearchFilePathVisitor(String selectedFileName) {
             this.selectedFileName = selectedFileName;
         }
