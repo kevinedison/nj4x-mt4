@@ -2,7 +2,6 @@ package com.jfx.ts.net;
 
 
 import com.jfx.io.CachedThreadFactory;
-import com.jfx.net.TerminalClient;
 import com.jfx.ts.io.LibrariesUtil;
 import com.jfx.ts.io.PSUtils;
 import com.jfx.ts.net.ws.TsWS;
@@ -19,7 +18,6 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.net.ServerSocket;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +32,7 @@ import java.util.concurrent.ThreadFactory;
  * User: roman
  * Date: 06/02/14
  * Time: 12:46
+ * 这个是主函数，是入口函数
  */
 public class TerminalServer {
     public static final String MINIMUM_CLIENT_VERSION = "2.4.0";
@@ -142,6 +141,7 @@ public class TerminalServer {
         } catch (Throwable e) {
             TS.LOGGER.error("Startup Error", e);
             displayUnexpectedError(e);
+
             System.exit(-1);
         }
         //

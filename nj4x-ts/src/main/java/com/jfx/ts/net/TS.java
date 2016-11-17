@@ -46,7 +46,6 @@ import com.jfx.ts.jmx.JMXServer;
 import com.jfx.ts.net.ws.dto.Nj4xClientInfo;
 import com.jfx.ts.net.ws.dto.Nj4xInvalidTokenException;
 import com.jfx.ts.net.ws.dto.Nj4xSessionExpiredException;
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
@@ -270,7 +269,7 @@ public class TS {
 
     static void extractResourceSrv() throws IOException {
         if (new File(JFX_HOME_SRV_DIR).exists()) {
-            ZipInputStream zis = new ZipInputStream(TS.class.getResourceAsStream("resources/srv.zip"));
+            ZipInputStream zis = new ZipInputStream(TS.class.getResourceAsStream("/com/jfx/ts/net/resources/srv.zip"));
             ZipEntry zipEntry;
             while ((zipEntry = zis.getNextEntry()) != null) {
                 String name = zipEntry.getName();

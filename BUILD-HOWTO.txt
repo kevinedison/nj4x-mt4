@@ -43,7 +43,6 @@ referred to as $NJ4X, and follow the instructions below.
 
     NJ4X Java library:  nj4x-src-2.6.2\jfx\target\jfx-2.6.2.jar 
 
-    Terminal Server:    nj4x-src-2.6.2\nj4x-ts\target\nj4x-ts-2.6.2-jar-with-dependencies.jar 
                                 (usage: java -jar nj4x-ts-2.6.2-jar-with-dependencies.jar)
 
     NJ4X .Net library:  nj4x-src-2.6.2\nj4x\target\nj4x.dll 

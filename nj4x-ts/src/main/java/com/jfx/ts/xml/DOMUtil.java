@@ -61,6 +61,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
 
+/**
+ * XML读取工具类
+ */
 public class DOMUtil {
     private static final Class[] PARAMETER_TYPES = new Class[]{};
     private static final Object[] INITARGS = new Object[]{};
@@ -68,6 +71,12 @@ public class DOMUtil {
 
     /**
      * Reads DOM Document from xml file.
+     *
+     * @param filePathName the file path name
+     *
+     * @return the document
+     *
+     * @exception RuntimeException the runtime exception
      */
     public static Document getDocument(String filePathName) throws RuntimeException {
         try {
@@ -91,15 +100,43 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Validate xml file.
+     *
+     * @param xmlFileName the xml file name
+     * @param xsdStream   the xsd stream
+     *
+     * @exception SAXException the sax exception
+     * @exception IOException  the io exception
+     */
     public static void validateXMLFile(String xmlFileName, InputStream xsdStream) throws SAXException, IOException {
         Validator validator = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema").newSchema(new StreamSource(xsdStream)).newValidator();
         validator.validate(new SAXSource(new InputSource(xmlFileName)), new SAXResult(new DefaultHandler()));
     }
 
+    /**
+     * The type Sax document.
+     */
     public static class SAXDocument {
+        /**
+         * The Is.
+         */
         InputStream is;
+        /**
+         * The Root.
+         */
         DOMUtil.SAXNode root;
 
+        /**
+         * Instantiates a new Sax document.
+         *
+         * @param is             the is
+         * @param readAttributes the read attributes
+         *
+         * @exception IOException                  the io exception
+         * @exception SAXException                 the sax exception
+         * @exception ParserConfigurationException the parser configuration exception
+         */
         public SAXDocument(InputStream is, final boolean readAttributes) throws IOException, SAXException, ParserConfigurationException {
             this.is = is;
             SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -134,6 +171,13 @@ public class DOMUtil {
             );
         }
 
+        /**
+         * Gets child node.
+         *
+         * @param elementName the element name
+         *
+         * @return the child node
+         */
         public DOMUtil.SAXNode getChildNode(String elementName) {
             DOMUtil.SAXNode node = null;
             Iterator i = getChildNodes(elementName);
@@ -143,6 +187,13 @@ public class DOMUtil {
             return node;
         }
 
+        /**
+         * Gets child nodes.
+         *
+         * @param elementName the element name
+         *
+         * @return the child nodes
+         */
         public Iterator getChildNodes(final String elementName) {
             return new Iterator() {
                 int pos = 0;
@@ -300,6 +351,9 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * The type Sax node.
+     */
     public static class SAXNode {
         private String name;
         private ArrayList childNodes;
@@ -307,10 +361,22 @@ public class DOMUtil {
         private boolean isPreserving;
         private static final String NO_SUCH_ATTRIBUTE = "";
 
+        /**
+         * Sets preserving.
+         *
+         * @param preserving the preserving
+         */
         public void setPreserving(boolean preserving) {
             isPreserving = preserving;
         }
 
+        /**
+         * Gets attribute.
+         *
+         * @param name the name
+         *
+         * @return the attribute
+         */
         public String getAttribute(String name) {
             if (attributes != null) {
                 for (int i = 0; i < attributes.length; i++) {
@@ -323,10 +389,18 @@ public class DOMUtil {
             return DOMUtil.SAXNode.NO_SUCH_ATTRIBUTE;
         }
 
+        /**
+         * Sets name.
+         *
+         * @param name the name
+         */
         public void setName(String name) {
             this.name = name;
         }
 
+        /**
+         * Clean.
+         */
         public void clean() {
             if (!isPreserving) {
                 attributes = null;
@@ -349,15 +423,32 @@ public class DOMUtil {
             this.isPreserving = true;
         }
 
+        /**
+         * Add child.
+         *
+         * @param cn the cn
+         */
         public void addChild(DOMUtil.SAXNode cn) {
             //noinspection unchecked
             (childNodes = childNodes == null ? new ArrayList() : childNodes).add(cn);
         }
 
+        /**
+         * Gets child nodes.
+         *
+         * @return the child nodes
+         */
         public ArrayList getChildNodes() {
             return childNodes;
         }
 
+        /**
+         * Gets elements by tag name.
+         *
+         * @param tagName the tag name
+         *
+         * @return the elements by tag name
+         */
         public ArrayList getElementsByTagName(String tagName) {
             ArrayList res = new ArrayList();
             if (childNodes != null) {
@@ -372,15 +463,43 @@ public class DOMUtil {
             return res;
         }
 
+        /**
+         * Gets name.
+         *
+         * @return the name
+         */
         public String getName() {
             return name;
         }
     }
 
+    /**
+     * Gets sax document.
+     *
+     * @param fName the f name
+     *
+     * @return the sax document
+     *
+     * @exception IOException                  the io exception
+     * @exception ParserConfigurationException the parser configuration exception
+     * @exception SAXException                 the sax exception
+     */
     public static DOMUtil.SAXDocument getSAXDocument(final String fName) throws IOException, ParserConfigurationException, SAXException {
         return getSAXDocument(fName, false);
     }
 
+    /**
+     * Gets sax document.
+     *
+     * @param fName          the f name
+     * @param readAttributes the read attributes
+     *
+     * @return the sax document
+     *
+     * @exception IOException                  the io exception
+     * @exception ParserConfigurationException the parser configuration exception
+     * @exception SAXException                 the sax exception
+     */
     public static DOMUtil.SAXDocument getSAXDocument(final String fName, boolean readAttributes) throws IOException, ParserConfigurationException, SAXException {
         return getSAXDocument(new InputStream() {
             InputStream fis = new BufferedInputStream(new FileInputStream(fName));
@@ -398,16 +517,45 @@ public class DOMUtil {
         });
     }
 
+    /**
+     * Gets sax document.
+     *
+     * @param is the is
+     *
+     * @return the sax document
+     *
+     * @exception IOException                  the io exception
+     * @exception ParserConfigurationException the parser configuration exception
+     * @exception SAXException                 the sax exception
+     */
     public static DOMUtil.SAXDocument getSAXDocument(InputStream is) throws IOException, ParserConfigurationException, SAXException {
         return getSAXDocument(is, false);
     }
 
+    /**
+     * Gets sax document.
+     *
+     * @param is             the is
+     * @param readAttributes the read attributes
+     *
+     * @return the sax document
+     *
+     * @exception IOException                  the io exception
+     * @exception ParserConfigurationException the parser configuration exception
+     * @exception SAXException                 the sax exception
+     */
     public static DOMUtil.SAXDocument getSAXDocument(InputStream is, boolean readAttributes) throws IOException, ParserConfigurationException, SAXException {
         return new DOMUtil.SAXDocument(is, readAttributes);
     }
 
     /**
      * Reads DOM Document from xml file.
+     *
+     * @param is the is
+     *
+     * @return the document
+     *
+     * @exception RuntimeException the runtime exception
      */
     public static Document getDocument(InputStream is) throws RuntimeException {
         try {
@@ -429,6 +577,12 @@ public class DOMUtil {
 
     /**
      * Reads DOM Document from string (e.g. it used in workflow)
+     *
+     * @param xmlString the xml string
+     *
+     * @return the document from string
+     *
+     * @exception RuntimeException the runtime exception
      */
     public static Document getDocumentFromString(String xmlString) throws RuntimeException {
         try {
@@ -442,6 +596,13 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Create document document.
+     *
+     * @return the document
+     *
+     * @exception RuntimeException the runtime exception
+     */
     public static Document createDocument() throws RuntimeException {
         DocumentBuilderFactory dFactory = getFactory();
         DocumentBuilder docBuilder = null;
@@ -487,20 +648,53 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Serialize document to byte array byte [ ].
+     *
+     * @param d the d
+     *
+     * @return the byte [ ]
+     *
+     * @exception RuntimeException the runtime exception
+     */
     public static byte[] serializeDocumentToByteArray(Document d) throws RuntimeException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         serializeDocument(d, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
 
+    /**
+     * Serialize document to string string.
+     *
+     * @param d the d
+     *
+     * @return the string
+     *
+     * @exception RuntimeException the runtime exception
+     */
     public static String serializeDocumentToString(Document d) throws RuntimeException {
         return new String(serializeDocumentToByteArray(d));
     }
 
+    /**
+     * Serialize document.
+     *
+     * @param d  the d
+     * @param os the os
+     *
+     * @exception RuntimeException the runtime exception
+     */
     public static void serializeDocument(Document d, OutputStream os) throws RuntimeException {
         serializeDocument(d, os, "UTF-8");
     }
 
+    /**
+     * Print document.
+     *
+     * @param d the d
+     *
+     * @exception RuntimeException the runtime exception
+     */
     public static void printDocument(Document d) throws RuntimeException {
         serializeDocument(d, new OutputStream() {
             public void write(int b) throws IOException {
@@ -509,6 +703,15 @@ public class DOMUtil {
         });
     }
 
+    /**
+     * Serialize document.
+     *
+     * @param d        the d
+     * @param os       the os
+     * @param encoding the encoding
+     *
+     * @exception RuntimeException the runtime exception
+     */
     public static void serializeDocument(Document d, OutputStream os, String encoding) throws RuntimeException {
         try {
             Class ofClass = null;
@@ -576,10 +779,25 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Gets top elements.
+     *
+     * @param n the n
+     *
+     * @return the top elements
+     */
     public static Iterator getTopElements(Node n) {
         return getTopElements(n, (String) null);
     }
 
+    /**
+     * Gets top elements.
+     *
+     * @param n               the n
+     * @param elementNodeName the element node name
+     *
+     * @return the top elements
+     */
     public static Iterator getTopElements(Node n, final String elementNodeName) {
         if (n != null) {
             return new DOMUtil.ElementIterator(n, new DOMUtil.NodeFilter() {
@@ -593,14 +811,38 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Gets top elements.
+     *
+     * @param n      the n
+     * @param filter the filter
+     *
+     * @return the top elements
+     */
     public static Iterator getTopElements(Node n, DOMUtil.NodeFilter filter) {
         return new DOMUtil.ElementIterator(n, filter);
     }
 
+    /**
+     * Gets sibling elements.
+     *
+     * @param startNode the start node
+     * @param filter    the filter
+     *
+     * @return the sibling elements
+     */
     public static Iterator getSiblingElements(Node startNode, DOMUtil.NodeFilter filter) {
         return new DOMUtil.SiblingIterator(startNode, filter);
     }
 
+    /**
+     * Gets next sibling element.
+     *
+     * @param startNode the start node
+     * @param filter    the filter
+     *
+     * @return the next sibling element
+     */
     public static Node getNextSiblingElement(Node startNode, DOMUtil.NodeFilter filter) {
         DOMUtil.SiblingIterator i = new DOMUtil.SiblingIterator(startNode, filter);
         if (i.hasNext()) {
@@ -610,6 +852,13 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Gets cdata child.
+     *
+     * @param p the p
+     *
+     * @return the cdata child
+     */
     public static String getCDATAChild(Element p) {
         Node cdata = p.getFirstChild();
         if (cdata != null) {
@@ -620,7 +869,17 @@ public class DOMUtil {
         return cdata == null ? null : cdata.getNodeValue();
     }
 
+    /**
+     * The interface Node filter.
+     */
     public static interface NodeFilter {
+        /**
+         * Is ok boolean.
+         *
+         * @param n the n
+         *
+         * @return the boolean
+         */
         boolean isOk(Node n);
     }
 
@@ -639,11 +898,38 @@ public class DOMUtil {
     }
 
     private static class ElementIterator implements Iterator {
+        /**
+         * The Nl.
+         */
         NodeList nl;
-        int max, current, next;
-        boolean hasNextCalled, hasNextResult;
+        /**
+         * The Max.
+         */
+        int max, /**
+         * The Current.
+         */
+        current, /**
+         * The Next.
+         */
+        next;
+        /**
+         * The Has next called.
+         */
+        boolean hasNextCalled, /**
+         * The Has next result.
+         */
+        hasNextResult;
+        /**
+         * The Filter.
+         */
         DOMUtil.NodeFilter filter;
 
+        /**
+         * Instantiates a new Element iterator.
+         *
+         * @param parentNode the parent node
+         * @param filter     the filter
+         */
         ElementIterator(Node parentNode, DOMUtil.NodeFilter filter) {
             this.filter = filter;
             nl = parentNode.getChildNodes();
@@ -692,10 +978,28 @@ public class DOMUtil {
     }
 
     private static class SiblingIterator implements Iterator {
+        /**
+         * The Current node.
+         */
         Node currentNode;
+        /**
+         * The Filter.
+         */
         DOMUtil.NodeFilter filter;
-        boolean hasNextCalled, hasNextResult;
+        /**
+         * The Has next called.
+         */
+        boolean hasNextCalled, /**
+         * The Has next result.
+         */
+        hasNextResult;
 
+        /**
+         * Instantiates a new Sibling iterator.
+         *
+         * @param startNode the start node
+         * @param filter    the filter
+         */
         SiblingIterator(Node startNode, DOMUtil.NodeFilter filter) {
             this.filter = filter;
             this.currentNode = startNode;
@@ -740,15 +1044,43 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Find element element.
+     *
+     * @param d        the d
+     * @param nodeName the node name
+     *
+     * @return the element
+     */
     public static Element findElement(Node d, String nodeName) {
         return findElement(d, nodeName, null, null);
     }
 
+    /**
+     * Find element element.
+     *
+     * @param d         the d
+     * @param nodeName  the node name
+     * @param attrName  the attr name
+     * @param attrValue the attr value
+     *
+     * @return the element
+     */
     public static Element findElement(Node d, String nodeName, String attrName, String attrValue) {
         NodeList nl = d.getChildNodes();
         return findElement(nl, nodeName, attrName, attrValue);
     }
 
+    /**
+     * Find element element.
+     *
+     * @param nl        the nl
+     * @param nodeName  the node name
+     * @param attrName  the attr name
+     * @param attrValue the attr value
+     *
+     * @return the element
+     */
     public static Element findElement(NodeList nl, String nodeName, String attrName, String attrValue) {
         int max = nl.getLength();
         for (int i = 0; i < max; ++i) {
@@ -768,15 +1100,43 @@ public class DOMUtil {
         return null;
     }
 
+    /**
+     * Find element dom util . sax node.
+     *
+     * @param d        the d
+     * @param nodeName the node name
+     *
+     * @return the dom util . sax node
+     */
     public static DOMUtil.SAXNode findElement(DOMUtil.SAXNode d, String nodeName) {
         return DOMUtil.findElement(d, nodeName, null, null);
     }
 
+    /**
+     * Find element dom util . sax node.
+     *
+     * @param d         the d
+     * @param nodeName  the node name
+     * @param attrName  the attr name
+     * @param attrValue the attr value
+     *
+     * @return the dom util . sax node
+     */
     public static DOMUtil.SAXNode findElement(DOMUtil.SAXNode d, String nodeName, String attrName, String attrValue) {
         ArrayList nl = d.getChildNodes();
         return findElement(nl, nodeName, attrName, attrValue);
     }
 
+    /**
+     * Find element dom util . sax node.
+     *
+     * @param nl        the nl
+     * @param nodeName  the node name
+     * @param attrName  the attr name
+     * @param attrValue the attr value
+     *
+     * @return the dom util . sax node
+     */
     public static DOMUtil.SAXNode findElement(ArrayList nl, String nodeName, String attrName, String attrValue) {
         if (nl != null) {
             int max = nl.size();
@@ -799,27 +1159,71 @@ public class DOMUtil {
         return null;
     }
 
+    /**
+     * Gets attribute.
+     *
+     * @param element  the element
+     * @param attrName the attr name
+     * @param dflt     the dflt
+     *
+     * @return the attribute
+     */
     public static String getAttribute(Element element, String attrName, String dflt) {
         String attrValue = element.getAttribute(attrName);
         return attrValue == null || attrValue.length() == 0 ? dflt : attrValue;
     }
 
+    /**
+     * Gets attribute as int.
+     *
+     * @param element  the element
+     * @param attrName the attr name
+     * @param dflt     the dflt
+     *
+     * @return the attribute as int
+     */
     public static int getAttributeAsInt(Element element, String attrName, int dflt) {
         String attrValue = element.getAttribute(attrName);
         return attrValue == null || attrValue.length() == 0 ? dflt : Integer.parseInt(attrValue);
     }
 
+    /**
+     * Gets attribute as boolean.
+     *
+     * @param element  the element
+     * @param attrName the attr name
+     * @param dflt     the dflt
+     *
+     * @return the attribute as boolean
+     */
     public static boolean getAttributeAsBoolean(Element element, String attrName, boolean dflt) {
         String attrValue = element.getAttribute(attrName);
         return attrValue == null || attrValue.length() == 0 ? dflt : Boolean.valueOf(attrValue).booleanValue();//Boolean.parseBoolean(attrValue);
     }
 
+    /**
+     * Sets attribute.
+     *
+     * @param eCol       the e col
+     * @param name       the name
+     * @param val        the val
+     * @param defaultVal the default val
+     */
     public static void setAttribute(Element eCol, String name, String val, String defaultVal) {
         if (val != null && !val.equals(defaultVal)) {
             eCol.setAttribute(name, val);
         }
     }
 
+    /**
+     * Gets attribute.
+     *
+     * @param eCol       the e col
+     * @param name       the name
+     * @param defaultVal the default val
+     *
+     * @return the attribute
+     */
     public static int getAttribute(Element eCol, String name, int defaultVal) {
         String val = eCol.getAttribute(name);
         if (val == null || val.length() == 0) {
@@ -829,6 +1233,15 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Gets attribute.
+     *
+     * @param eCol       the e col
+     * @param name       the name
+     * @param defaultVal the default val
+     *
+     * @return the attribute
+     */
     public static boolean getAttribute(Element eCol, String name, boolean defaultVal) {
         String val = eCol.getAttribute(name);
         if (val == null || val.length() == 0) {
@@ -838,18 +1251,42 @@ public class DOMUtil {
         }
     }
 
+    /**
+     * Sets attribute.
+     *
+     * @param eCol       the e col
+     * @param name       the name
+     * @param val        the val
+     * @param defaultVal the default val
+     */
     public static void setAttribute(Element eCol, String name, int val, int defaultVal) {
         if (val != defaultVal) {
             eCol.setAttribute(name, "" + val);
         }
     }
 
+    /**
+     * Sets attribute.
+     *
+     * @param eCol       the e col
+     * @param name       the name
+     * @param val        the val
+     * @param defaultVal the default val
+     */
     public static void setAttribute(Element eCol, String name, boolean val, boolean defaultVal) {
         if (val != defaultVal) {
             eCol.setAttribute(name, "" + val);
         }
     }
 
+    /**
+     * Gets node value.
+     *
+     * @param doc         the doc
+     * @param xpathPrefix the xpath prefix
+     *
+     * @return the node value
+     */
     public static String getNodeValue(Document doc, String xpathPrefix) {
         String result = null;
         try {

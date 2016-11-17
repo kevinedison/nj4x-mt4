@@ -15,7 +15,7 @@
         <module>zero_term</module>
         <module>nj4x-ts</module>
         <module>jfx</module>
-        <module>nj4x</module>
+        <!--<module>nj4x</module>-->
         
     </modules>
 
