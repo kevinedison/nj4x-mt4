@@ -67,6 +67,7 @@ import java.util.zip.ZipInputStream;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 /**
+ * 整个TS这个类就是初始化的工具
  * User: roman
  * Date: Jun 13, 2005
  * Time: 6:55:03 PM
@@ -128,34 +129,43 @@ public class TS {
      */
     public static boolean P_USE_MSTSC = System.getProperty("use_mstsc", "false").equals("true") && BoxUtils.BOXID == 0;
     /**
-     * The P mstsc port.
+     * The P mstsc port.远程端口吧
      */
     static final String P_MSTSC_PORT = System.getProperty("mstsc_port", "3389");
     /**
-     * The constant MIN_DISK_SPACE_GB.
+     * The constant MIN_DISK_SPACE_GB.最小的硬盘大小
      */
 //
     public static String MIN_DISK_SPACE_GB = System.getProperty("min_disk_space_gb", "1");
     /**
-     * The constant MAX_TERMS.
+     * The constant MAX_TERMS.这个应该是最大的终端数吧，2.0.2开头的版本是160个，其他是32个终端
      */
     public static final int MAX_TERMS = version.startsWith("2.0.2") ? 160 : 32;
 
     /**
-     * The Jfx term idle tmout seconds.
+     * The Jfx term idle tmout seconds. 超时时间
      */
-    static final long JFX_TERM_IDLE_TMOUT_SECONDS;
+    static final long JFX_TERM_IDLE_TMOUT_SECONDS;  //21600
     /**
-     * The constant JFX_HOME.
+     * The constant JFX_HOME. JFX的路径
      */
-    public static final String JFX_HOME;
+    public static final String JFX_HOME;   //  C:\Users\Micheal\jfx_term
     /**
      * The constant hostname.
      */
-    public static String hostname;
+    public static String hostname;    //DESKTOP-CT2L27I   计算机的名称
 
+
+    /**
+     * 1、静态代码块是在类加载时自动执行的，非静态代码块在创建对象自动执行的代码，不创建对象不执行该类的非静态代码块。 顺序： 静态代码块--》非静态代码块--》类构造方法。
+     * 2、在静态方法里面只能直接调用同类中其他的静态成员（包括变量和方法），而不能直接访问类中的非静态成员。因为对于非静态的方法和变量，需要先创建类的实例对象后方可使用，而静态方法在使用前不用创建任何对象。
+     * 3、如果某些代码必须要在项目启动时候就执行的时候，我们可以采用静态代码块，这种代码是主动执行的；需要在项目启动的时候就初始化，在不创建对象的情况下，其他程序来调用的时候，需要使用静态方法，此时代码是被动执行的。
+     * 区别：静态代码块是自动执行的；静态方法是被调用的时候才执行的；
+     * 作用：静态代码块可以用来初始化一些项目最常用的变量和对象；静态方法可以用作不创建对象也可以能需要执行的代码。
+     */
     static {
         try {
+            //不知道为什么要外部程序，不知道是干什么的，跑起来之后看看hostname是个什么鬼
             ExternalProcess p = new ExternalProcess("hostname");
             p.run();
             TS.hostname = p.getOut().trim();
@@ -166,6 +176,7 @@ public class TS {
     }
 
     static {
+        //貌似是初始化JFX的HOME路径，也许是
         JFX_HOME = System.getProperty("home", System.getProperty("user.home") + File.separatorChar + "jfx_term");
         System.setProperty("home", JFX_HOME);
         String tmout = System.getenv("JFX_TERM_IDLE_TMOUT_SECONDS");
@@ -176,59 +187,66 @@ public class TS {
         }
     }
 
+    //以下都是各个模块的路径 一会儿都吧路径写到注释里面
+
     /**
      * The Jfx home config.
      */
-    static final String JFX_HOME_CONFIG = JFX_HOME + File.separatorChar + "config";
+    static final String JFX_HOME_CONFIG = JFX_HOME + File.separatorChar + "config";  // C:\Users\Micheal\jfx_term\config
     /**
      * The Jfx home zterm dir.
+     * pathSeparatorChar是路径分隔符，在Window上是";"，在Unix上是":"
      */
-    static final String JFX_HOME_ZTERM_DIR = JFX_HOME + File.separatorChar + "zero_term";
+    static final String JFX_HOME_ZTERM_DIR = JFX_HOME + File.separatorChar + "zero_term";  //C:\Users\Micheal\jfx_term\zero_term
     /**
      * The Jfx home zterm mt 5 dir.
      */
-    static final String JFX_HOME_ZTERM_MT5_DIR = JFX_HOME + File.separatorChar + "zero_term_mt5";
+    static final String JFX_HOME_ZTERM_MT5_DIR = JFX_HOME + File.separatorChar + "zero_term_mt5";  // C:\Users\Micheal\jfx_term\zero_term_mt5
     /**
      * The Jfx home srv dir.
      */
-    static final String JFX_HOME_SRV_DIR = JFX_HOME + File.separatorChar + "srv";
+    static final String JFX_HOME_SRV_DIR = JFX_HOME + File.separatorChar + "srv";  // C:\Users\Micheal\jfx_term\srv
     /**
      * The Jfx home ea dir.
      */
-    static final String JFX_HOME_EA_DIR = JFX_HOME + File.separatorChar + "ea";
+    static final String JFX_HOME_EA_DIR = JFX_HOME + File.separatorChar + "ea"; // C:\Users\Micheal\jfx_term\ea
     /**
      * The Jfx home experts dir.
      */
-    static final String JFX_HOME_EXPERTS_DIR = JFX_HOME + File.separatorChar + "experts";
+    static final String JFX_HOME_EXPERTS_DIR = JFX_HOME + File.separatorChar + "experts";// C:\Users\Micheal\jfx_term\experts
     /**
      * The Jfx home indicators dir.
      */
-    static final String JFX_HOME_INDICATORS_DIR = JFX_HOME + File.separatorChar + "indicators";
+    static final String JFX_HOME_INDICATORS_DIR = JFX_HOME + File.separatorChar + "indicators";  //C:\Users\Micheal\jfx_term\indicators
     /**
      * The Jfx home chr dir.
      */
-    static final String JFX_HOME_CHR_DIR = JFX_HOME + File.separatorChar + "chr";
+    static final String JFX_HOME_CHR_DIR = JFX_HOME + File.separatorChar + "chr";  //C:\Users\Micheal\jfx_term\chr
     /**
      * The constant JMX_CONFIG_XML.
      */
-    public static final String JMX_CONFIG_XML = JFX_HOME_CONFIG + File.separatorChar + "mbean_config.xml";
+    public static final String JMX_CONFIG_XML = JFX_HOME_CONFIG + File.separatorChar + "mbean_config.xml";//C:\Users\Micheal\jfx_term\config\mbean_config.xml
     /**
      * The constant LOGGING_CONFIG_XML.
      */
-    public static String LOGGING_CONFIG_XML = JFX_HOME_CONFIG + File.separatorChar + (P_GUI_ONLY ? "gui_" : "") + "logging.xml";
+    public static String LOGGING_CONFIG_XML = JFX_HOME_CONFIG + File.separatorChar + (P_GUI_ONLY ? "gui_" : "") + "logging.xml";//C:\Users\Micheal\jfx_term\config\logging.xml
     /**
      * The constant LOGGER.
      */
     public static final Logger LOGGER;
 
     /**
-     * The constant TERM_DIR.
+     * The constant TERM_DIR.   C:\.7788
      */
-    public static String TERM_DIR = null;
+    public static String TERM_DIR = null;   //C:\.7788
 
     private static TSConfig tsConfig;
 
+    /**
+     * 这个应该是新建这些路径的静态块
+     */
     static {
+        //mkdir函数，如果存在就返回false
         new File(getTargetTermDir()).mkdirs();
         //
         new File(JFX_HOME_CONFIG).mkdirs();
@@ -395,8 +413,8 @@ public class TS {
      * The Gui.
      */
     TSConfigGUI gui;
-    private ScheduledFuture<?> netstatJob;
-    private ScheduledFuture<?> spaceMonitoringJob;
+    private ScheduledFuture<?> netstatJob;            //连接监控任务
+    private ScheduledFuture<?> spaceMonitoringJob;    //空间监控任务
 
     /**
      * Gets session manager.
@@ -408,8 +426,11 @@ public class TS {
     }
 
     /**
-     * 解压交易商的信息文件srv，不清楚是不是每次都要这儿样做
+     * 解压交易商的信息文件srv，每次都要这儿样做,如果存在就不复制了
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -419,7 +440,7 @@ public class TS {
             ZipEntry zipEntry;
             while ((zipEntry = zis.getNextEntry()) != null) {
                 String name = zipEntry.getName();
-                String pathname = JFX_HOME/*_SRV_DIR*/ + "/" + name;
+                String pathname = JFX_HOME/*_SRV_DIR*/ + "/" + name;//C:\Users\Micheal\jfx_term/srv/
                 File file = new File(pathname);
                 if (zipEntry.isDirectory()) {
                     if (file.isFile())
@@ -454,6 +475,9 @@ public class TS {
      *
      * @param dir the dir
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -507,6 +531,9 @@ public class TS {
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     static void copyFile(File from, String toPathName) throws IOException {
         if (from != null) {
@@ -553,9 +580,13 @@ public class TS {
     /**
      * Init terminal directory from zip.
      * zero item不知道干嘛的，将zip的文件初始化到终端的配置文件夹中，应该是MT4的程序，要配置的，这个还要看MT4的文档
+     * zip应该是配置文件的压缩包
      *
      * @param dir the dir
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -563,7 +594,7 @@ public class TS {
         ZipInputStream zis = null;
         try {
 //            String customTermDir = dir.replace("zero_term", "custom_term");
-            File rootDir = new File(dir);
+            File rootDir = new File(dir);   //C:\Users\Micheal\jfx_term6
             boolean rootDirExists = rootDir.exists();
             zis = new ZipInputStream(TS.class.getResourceAsStream("resources/basic_trader.zip"));
             //
@@ -673,6 +704,7 @@ public class TS {
             if (!new File(JFX_HOME_ZTERM_DIR + "/terminal.exe").exists()
                     && !new File(JFX_HOME_ZTERM_DIR.replace("zero_term", "custom_term") + "/terminal.exe").exists()
                     ) {
+                //选择32的程序
                 selectAndCopyTerminalExe(JFX_HOME_ZTERM_DIR, "terminal.exe");
             }
             String ztermMt5Dir = JFX_HOME_ZTERM_MT5_DIR;
@@ -682,6 +714,7 @@ public class TS {
                     && termExeNotFound("terminal.exe", ztermMt5Dir.replace("zero_term", "custom_term"))
                     ) {
                 String terminalFileName = IS_32BIT_VM ? "terminal.exe" : "terminal64.exe";
+                //选择MT5的终端？
                 selectAndCopyTerminalExe(JFX_HOME_ZTERM_MT5_DIR, terminalFileName);
             }
         } catch (Throwable t) {
@@ -700,6 +733,11 @@ public class TS {
                 && !new File(ztermMt5Dir + "/terminal.exe").exists();
     }
 
+    /**
+     * 这个是没有找到MT4的终端时候提示的
+     * @param dir
+     * @param file
+     */
     private static void selectAndCopyTerminalExe(String dir, String file) {
         final String mt45 = dir.equals(JFX_HOME_ZTERM_DIR) ? "MT4" : "MT5";
         String dialogTitle = "Select " + mt45 + " client terminal executable";
@@ -851,6 +889,9 @@ public class TS {
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     static void disableLiveUpdateIfNeeded(File newTerm) throws IOException {
         String mt4LiveUpdate = System.getenv().get("DISABLE_MT4_LIVE_UPDATE");
@@ -894,6 +935,9 @@ public class TS {
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     static void disableDir(File metaQuotesDir) throws IOException {
         if (metaQuotesDir.exists()) {
@@ -920,6 +964,9 @@ public class TS {
      *
      * @param newTerm the new term
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -977,6 +1024,9 @@ public class TS {
      * @param fName the f name
      * @param bytes the bytes
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -1040,6 +1090,9 @@ public class TS {
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     public TS(String port) throws IOException {
         this.port = port;
@@ -1058,7 +1111,7 @@ public class TS {
             }
             //
             try {
-                initTerminalDirectoryFromZip(JFX_HOME + File.separatorChar);  //配置中断的文件
+                initTerminalDirectoryFromZip(JFX_HOME + File.separatorChar);  //配置终端的文件
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1092,17 +1145,17 @@ public class TS {
             new ListenerThread(this).start();
         }
         //
-        if (!P_GUI_ONLY) {
-            spaceMonitoringJob = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+        if (!P_GUI_ONLY) {  //这个磁盘监控每60s进行一次6
+            spaceMonitoringJob =    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         long freeSpaceGB = 0;
                         long usableSpace = 0;
-                        final Path terminalsDirectory = Paths.get(getTermDir());
+                        final Path terminalsDirectory = Paths.get(getTermDir());//C:\.7788
                         try {
                             usableSpace = Files.getFileStore(terminalsDirectory).getUsableSpace();
-                            freeSpaceGB = usableSpace / 1024 / 1024 / 1024;
+                            freeSpaceGB = usableSpace / 1024 / 1024 / 1024;  //C盘剩下126G的空闲容量
                         } catch (IOException e) {
                             LOGGER.error("Error calculating usable space at " + getTermDir(), e);
                             return;
@@ -1119,7 +1172,7 @@ public class TS {
                         for (Session s : sessionManager.getSessions()) {
                             terminals.putAll(s.getTermProcesses());
                         }
-                        class FPair{
+                        class FPair {
                             public File socketLogFile;
                             public long lastModified;
 
@@ -1374,6 +1427,9 @@ public class TS {
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     static boolean canNotUseMstsc(String[] args) throws IOException {
         if (!new File(MSTSC).exists()) {
@@ -1447,6 +1503,7 @@ public class TS {
      * The constant USE_NJ4X_USER.
      */
     final static boolean USE_NJ4X_USER = false;
+
     private static void RunAsNj4x(String[] args) throws IOException {
         if (!USE_NJ4X_USER) return;
         SessionManager sessionManager = new SessionManager(null);
@@ -1481,7 +1538,7 @@ com.sun.management.jmxremote.ssl=false
             */
             cmdLine.add("com.jfx.ts.net.TerminalServer");
             if (args == null) {
-                Collections.addAll(cmdLine, "port", System.getProperty("port", "7788"), "use_mstsc", "true", "gui_only", ""+P_GUI_ONLY);
+                Collections.addAll(cmdLine, "port", System.getProperty("port", "7788"), "use_mstsc", "true", "gui_only", "" + P_GUI_ONLY);
             } else {
                 Collections.addAll(cmdLine, args);
             }
@@ -1505,6 +1562,9 @@ com.sun.management.jmxremote.ssl=false
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     static String assertProgramExitCode(int exitCode, String... cmd) throws IOException {
         return assertProgramExitCode(exitCode, null, cmd);
@@ -1519,6 +1579,9 @@ com.sun.management.jmxremote.ssl=false
      *
      * @return the string
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -1552,6 +1615,9 @@ com.sun.management.jmxremote.ssl=false
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     static int runProgramGetExitCode(String... cmd) throws IOException {
         return runProgramGetExitCode(0, cmd);
@@ -1565,6 +1631,9 @@ com.sun.management.jmxremote.ssl=false
      *
      * @return the int
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -1587,7 +1656,7 @@ com.sun.management.jmxremote.ssl=false
     /**
      * The constant NO_NETSTAT_DELAY_MILLIS.
      */
-    public static int NO_NETSTAT_DELAY_MILLIS = CONNECTION_TIMEOUT_MILLIS / 2;
+    public static int NO_NETSTAT_DELAY_MILLIS = CONNECTION_TIMEOUT_MILLIS / 2; //应该是没有连接时的延迟时间
     /**
      * The Last net stat.
      */
@@ -1793,6 +1862,9 @@ com.sun.management.jmxremote.ssl=false
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     boolean wmcloseProcess(String terminalProcessName, boolean show) throws IOException {
         int hWnd = getHWND(terminalProcessName);
@@ -1811,9 +1883,9 @@ com.sun.management.jmxremote.ssl=false
             }
             if (show && !wmClosed) {
                 LOGGER.info("Closing terminal:"
-                                + " res=" + b
-                                + " hWnd=" + hWnd
-                                + " " + terminalProcessName
+                        + " res=" + b
+                        + " hWnd=" + hWnd
+                        + " " + terminalProcessName
                 );
             }
             return b;
@@ -1929,6 +2001,9 @@ com.sun.management.jmxremote.ssl=false
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     public static void main(String[] args) throws IOException {
         LibrariesUtil.initEmbeddedLibraries();
@@ -1942,6 +2017,9 @@ com.sun.management.jmxremote.ssl=false
     /**
      * Dupm terminals ip.
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -2014,6 +2092,9 @@ com.sun.management.jmxremote.ssl=false
     /**
      * Kill terminals in term dir.
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -2231,7 +2312,7 @@ com.sun.management.jmxremote.ssl=false
                             //
                             ArrayList<Long> toDelete = new ArrayList<Long>();
                             synchronized (clients) {
-                                for(Map.Entry<Long, ClientWorker> e : clients.entrySet()) {
+                                for (Map.Entry<Long, ClientWorker> e : clients.entrySet()) {
                                     if (e.getValue().getLastUsageTimeIntervalMillis() > SESSION_TIMEOUT_MILLIS) {
                                         toDelete.add(e.getKey());
                                     }
@@ -2262,6 +2343,12 @@ com.sun.management.jmxremote.ssl=false
      * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
      * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
      * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
      */
     public ClientWorker getClientWorker(long token, String info) throws Nj4xInvalidTokenException, Nj4xSessionExpiredException {
         if (token > 0) {
@@ -2287,6 +2374,12 @@ com.sun.management.jmxremote.ssl=false
      *
      * @return the client worker
      *
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
+     * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
+     * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
      * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
      * @exception Nj4xSessionExpiredException the nj 4 x session expired exception
      * @exception Nj4xInvalidTokenException   the nj 4 x invalid token exception
@@ -2875,10 +2968,13 @@ com.sun.management.jmxremote.ssl=false
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     public static ArrayList<String> getInstalledExperts() throws IOException {
         ArrayList<String> res = new ArrayList<>();
-        for(String ea : new File(JFX_HOME_EXPERTS_DIR).list()) {
+        for (String ea : new File(JFX_HOME_EXPERTS_DIR).list()) {
             res.add(fileNameToEA(ea));
         }
         return res;
@@ -2891,10 +2987,13 @@ com.sun.management.jmxremote.ssl=false
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     public static ArrayList<String> getInstalledIndicators() throws IOException {
         ArrayList<String> res = new ArrayList<>();
-        for(String ea : new File(JFX_HOME_INDICATORS_DIR).list()) {
+        for (String ea : new File(JFX_HOME_INDICATORS_DIR).list()) {
             res.add(fileNameToEA(ea));
         }
         return res;
@@ -2905,7 +3004,7 @@ com.sun.management.jmxremote.ssl=false
     }
 
     private static String indicatorToFileName(String indicatorName) {
-        indicatorName = indicatorName.startsWith("_ind_") ? indicatorName : "_ind_"+indicatorName;
+        indicatorName = indicatorName.startsWith("_ind_") ? indicatorName : "_ind_" + indicatorName;
         return indicatorName.endsWith(".ex4") ? indicatorName : indicatorName + ".ex4";
     }
 
@@ -2919,6 +3018,9 @@ com.sun.management.jmxremote.ssl=false
      * @param _eaName the ea name
      * @param content the content
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -2943,6 +3045,9 @@ com.sun.management.jmxremote.ssl=false
      * @param _indicatorName the indicator name
      * @param content        the content
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -2970,6 +3075,9 @@ com.sun.management.jmxremote.ssl=false
      *
      * @exception IOException the io exception
      * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      */
     public static void installExpertLibrary(String _eaName, String libName, byte[] content) throws IOException {
         String eaFileName = eaToFileName(_eaName);
@@ -2986,7 +3094,7 @@ com.sun.management.jmxremote.ssl=false
             libDir.mkdirs();
             Files.write(libDir.toPath().resolve(libName), content);
         } else {
-            throw new IOException("'"+eaFileName+"' expert's installation does not exist.");
+            throw new IOException("'" + eaFileName + "' expert's installation does not exist.");
         }
     }
 
@@ -2996,6 +3104,9 @@ com.sun.management.jmxremote.ssl=false
      * @param _eaName the ea name
      * @param termDir the term dir
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -3034,7 +3145,7 @@ com.sun.management.jmxremote.ssl=false
                 Files.copy(file.toPath(), Paths.get(termDir + "/MQL4/Experts").resolve(eaFileName), StandardCopyOption.REPLACE_EXISTING);
             }
         } else {
-            throw new IOException("'"+eaFileName+"' expert's installation does not exist: " + file.getAbsolutePath());
+            throw new IOException("'" + eaFileName + "' expert's installation does not exist: " + file.getAbsolutePath());
         }
     }
 
@@ -3044,6 +3155,9 @@ com.sun.management.jmxremote.ssl=false
      * @param _indicatorName the indicator name
      * @param termDir        the term dir
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      * @exception IOException the io exception
      */
@@ -3082,7 +3196,7 @@ com.sun.management.jmxremote.ssl=false
                 Files.copy(file.toPath(), Paths.get(termDir + "/MQL4/Indicators").resolve(indicatorFileName), StandardCopyOption.REPLACE_EXISTING);
             }
         } else {
-            throw new IOException("'"+indicatorFileName+"' indicator's installation does not exist: " + file.getAbsolutePath());
+            throw new IOException("'" + indicatorFileName + "' indicator's installation does not exist: " + file.getAbsolutePath());
         }
     }
 

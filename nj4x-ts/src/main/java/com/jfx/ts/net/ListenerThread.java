@@ -19,7 +19,7 @@ class ListenerThread extends Thread {
 
     ListenerThread(TS ts) throws IOException {
         super("Listener");
-        setDaemon(true);
+        setDaemon(true);  //设置守护进程
         this.ts = ts;
         this.serverSocket = new ServerSocket(ts.getPort());
     }

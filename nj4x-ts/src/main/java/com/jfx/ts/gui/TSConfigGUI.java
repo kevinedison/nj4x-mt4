@@ -49,7 +49,7 @@ public class TSConfigGUI {
     public static final String ACCOUNT_COLUMN = "Account";
     public static final String PID_COLUMN = "PID";
     public static final int KEY_PRESSED_ACTION_DELAY = 500;
-    final ArrayList<TerminalParams> connectionsInProgress;
+    final ArrayList<TerminalParams> connectionsInProgress;  //正在进行连接的终端
     //
     public JPanel tsConfigGUIRoot;
     public JTextField maxTerminalsField;
@@ -63,19 +63,19 @@ public class TSConfigGUI {
     private JButton tsHomeDirOpenBtn;
     private JButton termsDirOpenBtn;
     private JTextField termsDirField;
-    private JCheckBox enableDebugInfoCheckBox;
+    private JCheckBox enableDebugInfoCheckBox;//选择调试信息的多选框
     private JCheckBox hideTerminalsCheckBox;
     private JTextField minDiskSpaceField;
-    private JPanel connectionsInProgressPanel;
+    private JPanel connectionsInProgressPanel;  //进入连接
     private JPanel activeTerminalsPanel;
     private JTable logTable;
     private JTextField filterField;
-    private JTextField limitRowsField;
+    private JTextField limitRowsField;//设置log事件数量的上限
     private JButton collectReportButton;
     private JButton clearButton;
     private JLabel maxSessionsLabel;
     private JTextField connTimeoutField;
-    private JCheckBox deployEaWsCheckBox;
+    private JCheckBox deployEaWsCheckBox;  //是否部署专家系统的选择框
     private JCheckBox useGDrive;
     private JPanel GDrive;
     private JComboBox srvAtGDrive;
@@ -88,19 +88,19 @@ public class TSConfigGUI {
     private JPanel zeroTermMt5AtGDrivePanel;
     private JLabel conectionTimeoutLabel;
     private JLabel keepMinDiskSpaceLabel;
-    private CircularArrayList<LoggingEvent> logEvents;
+    private CircularArrayList<LoggingEvent> logEvents;  //应该是事件列表
 
     public TSConfigGUI() {
-        connectionsInProgress = new ArrayList<>();
-        enableDebugInfoCheckBox.setSelected(TS.LOGGER.isDebugEnabled());
-        hideTerminalsCheckBox.setSelected(TerminalParams.SW_HIDE.equals("true"));
-        if (true || TS.NJ4X.endsWith("P5")) {
-            deployEaWsCheckBox.setVisible(false);
+        connectionsInProgress = new ArrayList<>();//实例化正在进行连接的终端
+        enableDebugInfoCheckBox.setSelected(TS.LOGGER.isDebugEnabled());//启动的时候读取log4j的配置，是否支持调试信息
+        hideTerminalsCheckBox.setSelected(TerminalParams.SW_HIDE.equals("true")); //设置隐藏终端的选择框
+        if (true || TS.NJ4X.endsWith("P5")) {   //检测NJ4X的版本是不是以P5结束的
+            deployEaWsCheckBox.setVisible(false); //不显示是否部署专家系统的选择框
         } else {
-            deployEaWsCheckBox.setSelected(TerminalServer.IS_DEPLOY_EA_WS);
+            deployEaWsCheckBox.setSelected(TerminalServer.IS_DEPLOY_EA_WS); //显示选择框，但根据终端的设置来确定是否选中
         }
         //
-        if (TS.P_GUI_ONLY) {
+        if (TS.P_GUI_ONLY) {//只显示iGUI的时候，不显示以下控件
             connectionsInProgressPanel.setVisible(false);
             hideTerminalsCheckBox.setVisible(false);
             connTimeoutField.setVisible(false);
@@ -110,7 +110,8 @@ public class TSConfigGUI {
             deployEaWsCheckBox.setVisible(false);
         }
         //
-        logEvents = new CircularArrayList<>(Math.max(Integer.parseInt(limitRowsField.getText()), MIN_LOG_EVENTS_TO_KEEP));
+        logEvents = new CircularArrayList<>(Math.max(Integer.parseInt(limitRowsField.getText()), MIN_LOG_EVENTS_TO_KEEP));//实例化日志事件
+//        动态设置log4j的配置，主要是处理log在界面的显示，其实不用这样也可以很简单的实现
         Logger.getRootLogger().addAppender(new AsyncAppender() {
             long eventNo = 0;
 
@@ -121,7 +122,7 @@ public class TSConfigGUI {
                     //
                     event.setProperty("id", String.valueOf(this.eventNo++));
                     synchronized (logTable) {
-                        logEvents.insert(event);
+                        logEvents.insert(event);//将日志加入到日志列表
                     }
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
@@ -129,7 +130,7 @@ public class TSConfigGUI {
                             try {
                                 if (isFilterOkForEvent(event)) {
                                     CircularTableModel model = (CircularTableModel) logTable.getModel();
-                                    model.addRow(toDataRow(event));
+                                    model.addRow(toDataRow(event));//界面显示log
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -155,11 +156,12 @@ public class TSConfigGUI {
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
         int col;
-        //
+        //设置等待连接table
         connectionsInProgressTable.setModel(new DefaultTableModel(
                 new Object[][]{},
                 new Object[]{BROKER_COLUMN, ACCOUNT_COLUMN, "Start Time", DURATION_COLUMN, PATH_COLUMN}
         ));
+        //以下设置字段的样式，长宽
         TableColumnModel connectionsInProgressColumnModel = connectionsInProgressTable.getColumnModel();
         col = 0;
         // Broker
@@ -185,6 +187,7 @@ public class TSConfigGUI {
         connectionsInProgressColumnModel.getColumn(col++).setPreferredWidth(500);
         connectionsInProgressTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         int durationColumnIndex = ((DefaultTableModel) connectionsInProgressTable.getModel()).findColumn(DURATION_COLUMN);
+        //设置排序
         TableRowSorter rowSorter = (TableRowSorter) connectionsInProgressTable.getRowSorter();
         Comparator<Integer> integerComparator = new Comparator<Integer>() {
             @Override
@@ -195,9 +198,10 @@ public class TSConfigGUI {
         rowSorter.setComparator(durationColumnIndex, integerComparator);
         rowSorter.toggleSortOrder(durationColumnIndex);
         rowSorter.toggleSortOrder(durationColumnIndex);
-        //
+        //每一秒执行一次
         TS.scheduledExecutorService.schedule(new Runnable() {
             public void run() {
+//                将正在连接的终端列表下乳这个map
                 final HashMap<String, TerminalParams> tp = new HashMap<>();
                 synchronized (connectionsInProgress) {
                     for (TerminalParams p : connectionsInProgress) {
@@ -222,11 +226,13 @@ public class TSConfigGUI {
                                     } else {
                                         model.setValueAt(
                                                 //                                            "<html><b>" + ((System.currentTimeMillis() - terminalParams.start.getTime()) / 1000) + "</b></html>",
+//                                                设置连接的时间
                                                 new Integer((int) ((System.currentTimeMillis() - terminalParams.start.getTime()) / 1000)),
                                                 row, model.findColumn(DURATION_COLUMN)
                                         );
                                     }
                                 }
+//                                设置好时间之后开始显示
                                 if (!allInPlace) {
                                     dataVector.clear();
                                     // new Object[]{"Broker", "Account", "Path", "Start Time", "Duration (s)"}
@@ -246,7 +252,7 @@ public class TSConfigGUI {
                                     }
                                     model.fireTableDataChanged();
                                 }
-                                //
+                                //这个才是真真的显示
                                 SwingUtilities.invokeLater(new Runnable() {
                                     @Override
                                     public void run() {
@@ -268,15 +274,16 @@ public class TSConfigGUI {
                         }
                     }
                 });
-                //
+                //不知道这句话是干什么用的，为什么要this，this指的是这个new runable类，不知道加不加有什么区别
                 TS.scheduledExecutorService.schedule(this, 1, TimeUnit.SECONDS);
             }
         }, 1, TimeUnit.SECONDS);
-        //
+        //接下来开始的是已经激活的连接
         activeTerminalsTable.setModel(new DefaultTableModel(
                 new Object[][]{},
                 new Object[]{"Session", "PID", BROKER_COLUMN, ACCOUNT_COLUMN, PATH_COLUMN}
         ));
+        //设置表格的样式
         TableColumnModel activeTerminalsTableColumnModel = activeTerminalsTable.getColumnModel();
         col = 0;
         // Session
@@ -300,9 +307,10 @@ public class TSConfigGUI {
         activeTerminalsTableColumnModel.getColumn(col).setPreferredWidth(500);
 
         if (!TS.P_USE_MSTSC)
-            activeTerminalsTableColumnModel.removeColumn(session);
+            activeTerminalsTableColumnModel.removeColumn(session);//不使用远程连接的时候就不显示远程连接的session
 
         activeTerminalsTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        //设置这个表格的鼠标事件
         activeTerminalsTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -334,6 +342,8 @@ public class TSConfigGUI {
         rowSorter.setComparator(1, integerComparator);
         rowSorter.toggleSortOrder(((DefaultTableModel) activeTerminalsTable.getModel()).findColumn(PATH_COLUMN));
         //
+
+        //设置日志的表格
         logTable.setModel(new CircularTableModel(
                 Integer.parseInt(limitRowsField.getText()),
                 new Object[][]{},
@@ -342,11 +352,11 @@ public class TSConfigGUI {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            }
+            }//设置不可编辑
         });
         TableColumnModel logTableColumnModel = logTable.getColumnModel();
         col = 0;
-        // Rec #
+        // Rec #日志表格的样式
         logTableColumnModel.getColumn(col).setCellRenderer(rightRenderer);
         logTableColumnModel.getColumn(col).setMinWidth(30);
         logTableColumnModel.getColumn(col).setMaxWidth(70);
@@ -401,6 +411,7 @@ public class TSConfigGUI {
 
             public void warn() {
                 final String text = limitRowsField.getText();
+                //监听日志限制输入框的输入变化
                 TS.scheduledExecutorService.schedule(new Runnable() {
                     @Override
                     public void run() {
@@ -435,7 +446,7 @@ public class TSConfigGUI {
                 }, KEY_PRESSED_ACTION_DELAY, TimeUnit.MILLISECONDS);
             }
         });
-        //
+        //最小磁盘输入框的操作
         minDiskSpaceField.setText(TS.MIN_DISK_SPACE_GB);
         minDiskSpaceField.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
@@ -469,7 +480,7 @@ public class TSConfigGUI {
                                                         "Error: Please enter number bigger than 0", "Error Message",
                                                         JOptionPane.ERROR_MESSAGE);
                                             } else {
-                                                TS.MIN_DISK_SPACE_GB = text;
+                                                TS.MIN_DISK_SPACE_GB = text;//设置TS的最小磁盘空间
                                                 TS.LOGGER.info("Minimum disk space set to " + text + "GB");
                                             }
                                         } catch (NumberFormatException e) {
@@ -487,7 +498,7 @@ public class TSConfigGUI {
                 }, KEY_PRESSED_ACTION_DELAY, TimeUnit.MILLISECONDS);
             }
         });
-        //
+        //连接超时输入框的处理
         connTimeoutField.setText(String.valueOf(TS.CONNECTION_TIMEOUT_MILLIS / 1000));
         connTimeoutField.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
@@ -522,7 +533,7 @@ public class TSConfigGUI {
                                                         "Error: Please enter number 10 <= n <= 300", "Error Message",
                                                         JOptionPane.ERROR_MESSAGE);
                                             } else {
-                                                TS.CONNECTION_TIMEOUT_MILLIS = timeout * 1000;
+                                                TS.CONNECTION_TIMEOUT_MILLIS = timeout * 1000;//设置TS的超时时间
                                                 TS.NO_NETSTAT_DELAY_MILLIS = TS.CONNECTION_TIMEOUT_MILLIS / 2;
                                                 TS.LOGGER.info("Connection Timeout set to " + timeout + " seconds");
                                             }
@@ -541,7 +552,7 @@ public class TSConfigGUI {
                 }, KEY_PRESSED_ACTION_DELAY, TimeUnit.MILLISECONDS);
             }
         });
-        //
+        //日志过滤输入框的操作，主要就是查找
         filterField.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 applyFilters();
@@ -555,13 +566,14 @@ public class TSConfigGUI {
                 applyFilters();
             }
         });
-        //
+        //日志过滤输入框清除的事件
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 filterField.setText("");
             }
         });
+        //收集日志的事件
         collectReportButton.addActionListener(new ActionListener() {
             private File lastLogDir = null;
 
@@ -679,6 +691,7 @@ public class TSConfigGUI {
                 }
             }
         });
+        //允许debug级别的日志多选框监听事件
         enableDebugInfoCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -687,12 +700,14 @@ public class TSConfigGUI {
                 TS.LOGGER.setLevel(level);
             }
         });
+        //选择隐藏后，不会显示mt4的程序界面
         hideTerminalsCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TerminalParams.SW_HIDE = Boolean.toString(hideTerminalsCheckBox.isSelected());
             }
         });
+        //部署专家系统的多选框事件，但是目前没有显示，也就不着急研究这个
         deployEaWsCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -707,7 +722,7 @@ public class TSConfigGUI {
                 }
             }
         });
-        //
+        //打开Ts终端的按钮事件
         tsHomeDirOpenBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -720,7 +735,7 @@ public class TSConfigGUI {
                 }
             }
         });
-        //
+        //打开终端的路径，这两个是不一样的
         termsDirOpenBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -737,6 +752,9 @@ public class TSConfigGUI {
         initCloudTab();
     }
 
+    /**
+     * 初始化云盘的tab，可以不看
+     */
     private void initCloudTab() {
         if (!TS.NJ4X.endsWith("P5")) {
             zeroTermMt5AtGDrive.setVisible(false);
@@ -870,6 +888,9 @@ public class TSConfigGUI {
         });
     }
 
+    /**
+     * 初始化云盘
+     */
     private void initGDrive() {
         TS.scheduledExecutorService.schedule(new Runnable() {
             @Override
@@ -972,6 +993,15 @@ public class TSConfigGUI {
         gDriveOwner.setText("");
     }
 
+    /**
+     * 设置右击菜单的
+     * @param path
+     * @param broker
+     * @param account
+     * @param PID
+     * @param sessionUser
+     * @return
+     */
     private JPopupMenu createActiveTerminalsTablePopUp(final String path, final String broker, final String account, final Integer PID, final String sessionUser) {
         // Create some menu items for the popup
         final JMenuItem menuRefresh = new JMenuItem("Refresh");
@@ -1233,7 +1263,7 @@ public class TSConfigGUI {
         row.add(event.getRenderedMessage());
         return row;
     }
-
+//    设置Ts
     public void setTs(TS ts) {
         this.ts = ts;
         boolean isNotPersonal = BoxUtils.BOXID == 0;
@@ -1243,7 +1273,7 @@ public class TSConfigGUI {
                 + (TS.P_GUI_ONLY ? " Viewer" : "")
                 + ", v" + TS.NJ4X
                 + (isNotPersonal ? "" : ", BOXID=" + BoxUtils.BOXID)
-                + ", port=" + ts.getPortAsString();
+                + ", port=" + ts.getPortAsString();  // Terminal Server, v2.6.2, port=7788
         versionTextField.setText(version);
         tsHomeField.setText(TS.JFX_HOME);
         termsDirField.setText(TS.TERM_DIR == null ? TS.getTermDir() : TS.getTermDir() + " -> " + TS.getTargetTermDir());
@@ -1257,7 +1287,7 @@ public class TSConfigGUI {
                 || event.getRenderedMessage().contains(content)
                 ;
     }
-
+//    更新终端MT4，这个类没有用到它，其他地方用到了
     public void updateTerminals(final SessionManager sessionManager) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -1295,7 +1325,7 @@ public class TSConfigGUI {
                                                 break;
                                             }
                                         }
-    //                                    sp2 = sp2 > 0 ? sp2 : pPath.indexOf(' ', sp1 + 1);
+                                        //                                    sp2 = sp2 > 0 ? sp2 : pPath.indexOf(' ', sp1 + 1);
                                         sp2 = sp2 >= 0 ? sp2 : sp1;
                                         row.add(srvPrefix);
                                         String acct = pPath.substring(sp2 + 1, pPath.lastIndexOf('\\')).trim();
@@ -1311,7 +1341,7 @@ public class TSConfigGUI {
                                     //
                                     dataVector.add(row);
                                 } catch (Exception e) {
-                                    TS.LOGGER.error("Error parsing ["+p.getKey()+"]", e);
+                                    TS.LOGGER.error("Error parsing [" + p.getKey() + "]", e);
                                 }
                             }
                         }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Limited size ring (FIFO) table model.
+ * Limited size ring (FIFO) table model.  回环数据类型
  * Created by roman on 26-Mar-15.
  */
 public class CircularTableModel extends AbstractTableModel {

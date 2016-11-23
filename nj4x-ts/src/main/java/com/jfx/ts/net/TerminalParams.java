@@ -16,11 +16,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
 
 /**
+ * 记录这个是终端的参数，就是描述终端的
  * User: roman
  * Date: 06/08/2014
  * Time: 09:44

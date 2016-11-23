@@ -47,7 +47,7 @@ public class TerminalServer {
      * The constant AVAILABLE_PROCESSORS.
      */
 //    public static final ExecutorService CACHED_THREAD_POOL = EfficientThreadPoolExecutor.get(16, 128, 10, TimeUnit.SECONDS, 256, "NJ4X Services #");
-    public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
+    public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();  //FJ池的期望并发数
     /**
      * The constant MAX_TERMINAL_STARTUP_THREADS.
      */
@@ -67,7 +67,7 @@ public class TerminalServer {
     /**
      * The constant IS_DEPLOY_EA_WS.
      */
-    public static boolean IS_DEPLOY_EA_WS;
+    public static boolean IS_DEPLOY_EA_WS;//是否部署专家系统
     private static TS ts;
     private static HttpServer httpServer;
     private static boolean eaWsDeployed = false;
@@ -78,10 +78,17 @@ public class TerminalServer {
     }
 
     /**
-     * Stop service.
+     * 停止服务的函数，这个就是简单的退出函数，但是按照注释掉的代码看，不明白他要干什么
      *
      * @param args the args
      *
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
+     * @exception IOException the io exception
      * @exception IOException the io exception
      */
     public static void stopService(String[] args) throws IOException {
@@ -110,6 +117,13 @@ public class TerminalServer {
      * @param args the input arguments
      *
      * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
      */
     public static void main(String[] args) throws Exception {
         try {
@@ -133,14 +147,14 @@ public class TerminalServer {
             // *********************************************************************
             //
             //
-            if (TS.P_USE_MSTSC && TS.canNotUseMstsc(args)) {       //貌似是远程的问题
+            if (TS.P_USE_MSTSC && TS.canNotUseMstsc(args)) {       //貌似是远程的问题，canNotUseMstsc这个方法还没有分析，因为前面的条件就是false，所以不会执行的
                 throw new RuntimeException("Can not run in MSTSC mode.");
             }
             //
             //
             // *********************************************************************
             //
-            //最大连接数线程数
+            //最大连接数线程数，不知道为什么要搞得这么负责
             MAX_TERMINAL_STARTUP_THREADS = Integer.parseInt(System.getProperty("max_terminal_connection_threads", "" +
                     (AVAILABLE_PROCESSORS >= 24 ? AVAILABLE_PROCESSORS / 2
                             : (AVAILABLE_PROCESSORS >= 12 ? AVAILABLE_PROCESSORS / 3
@@ -184,7 +198,7 @@ public class TerminalServer {
     }
 
     /**
-     * Display unexpected error.
+     * 显示意想不到的错误，属于错误处理
      *
      * @param e the e
      */
@@ -203,6 +217,11 @@ public class TerminalServer {
         );
     }
 
+    /**
+     * 一般用Visual C++开发的Windows应用程序需要这个运行时库的支持才能在没有安装Visual C++的计算机上正常运行，也可以在开发软件时选择”在静态库中使用 MFC“，从而将调用的库函数的代码嵌入应用程序，避免对运行时库的依赖。
+     * 此软件包安装 C Runtime(CRT)、Standard C++、ATL、MFC、OpenMP 和 MSDIA 库的运行时组件。对于支持并行部署模式的库（CRT、SCL、ATL、MFC 和 OpenMP），这些运行时组件安装在支持并行程序集的 Windows 操作系统版本的本机程序集缓存中，这一缓存也称为 WinSxS 文件夹
+     * 解决C++的依赖问题
+     */
     private static void displayVCRedistributableDownloadInfo() {
         JEditorPane pane = new JEditorPane("text/html",
                 "NJ4X TS requires latest vcredist_x86.exe (v120) and vcredist_x64.exe (v120) " +
@@ -225,10 +244,17 @@ public class TerminalServer {
     }
 
     /**
-     * 部署函数
+     * 真正的部署函数
      *
      * @param _port the port
      *
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
+     * @exception Exception the exception
      * @exception Exception the exception
      */
     public static void deploy(String _port) throws Exception {
@@ -263,10 +289,10 @@ public class TerminalServer {
             System.setProperty("com.sun.xml.internal.ws.transport.http.HttpAdapter.dump", "true");
         }
 */
-        //
+        //以下是部署NJ4X的webservice函数的，但是you异常，以后再看
         ts = new TS(_port);
         //
-        String host = System.getProperty("ws_host", "0.0.0.0");  //目前还不知道ws是干嘛的
+        String host = System.getProperty("ws_host", "0.0.0.0");  //ws是webservice，是NJ4X的webservice
         int port = (System.getProperty("ws_port") == null ? 1 : 0) + Integer.parseInt(System.getProperty("ws_port", ts.getPortAsString()));
         System.setProperty("nj4x_server_host", "127.0.0.1");
         System.setProperty("nj4x_server_port", String.valueOf(Integer.parseInt(_port) + 4));
@@ -283,7 +309,7 @@ public class TerminalServer {
             //
             {
                 TsWS ws = new TsWS(ts);
-                String address = "http://" + host + ":" + port + "/nj4x/ts";
+                String address = "http://" + host + ":" + port + "/nj4x/ts";//http://0.0.0.0:7789/nj4x/ts
                 //
                 Endpoint endpoint = Endpoint.publish(address, ws);
 //                Endpoint endpoint = Endpoint.create(ws/*, new LoggingFeature()*/);
@@ -320,13 +346,13 @@ public class TerminalServer {
                     logger.debug("Skip deployment: " + ignore.getMessage());
                 }
             }
-            //
+            //部署专家系统webservice
             deployEaWs(true);
         }
     }
 
     /**
-     * Deploy ea ws boolean.
+     * 部署专家系统的webservice
      *
      * @param deploy the deploy
      *

@@ -62,6 +62,7 @@ public class JMXServerImpl extends JMXServer {
             throw new RuntimeException("System property " + MX4J_CONFIG_XML + " is not defined");
         }
         initMBeanServer();
+
     }
 
     private void initMBeanServer() {

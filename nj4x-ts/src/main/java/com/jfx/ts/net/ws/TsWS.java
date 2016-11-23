@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
+ * 这个是webservice的类，但是具体干嘛的就不清楚了
  * User: roman
  * Date: 05/08/2014
  * Time: 22:11

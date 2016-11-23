@@ -11,6 +11,7 @@
     <artifactId>nj4x-ts</artifactId>
     <packaging>jar</packaging>
     <name>NJ4X Terminal Server</name>
+    <description>这个就是显示的终端，调用的地城是jfx库，这个为什么这么麻烦呢</description>
 
     <properties>
         <out>nj4x${m}-ts-${product}</out>

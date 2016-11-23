@@ -42,7 +42,6 @@ import com.jfx.ts.net.TS;
 import com.jfx.ts.net.TerminalServer;
 
 import java.io.File;
-import java.net.Socket;
 
 public class PSUtils {
     public static final boolean IS_CPU1_FREE = System.getProperty("is_cpu1_free", "" + (TerminalServer.AVAILABLE_PROCESSORS > 2)).equals("true");
@@ -253,7 +252,7 @@ public class PSUtils {
 
     public static native int closeSocket(int fd);
 
-    public static native boolean isAdministrator();
+    public static native boolean isAdministrator();  //标识符native可以与所有其它的java标识符连用，但是abstract除外。这是合理的，因为native暗示这些方法是有实现体的，只不过这些实现体是非java的，但是abstract却显然的指明这些方法无实现体。native与其它java标识符连用时，其意义同非Native Method并无差别。
 
     public static boolean asAdministrator() {
         if (!isAdministrator()) {

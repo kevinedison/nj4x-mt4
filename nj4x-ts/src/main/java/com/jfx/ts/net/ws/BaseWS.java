@@ -13,7 +13,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 
 /**
- * Collection of common NJ4X Web service methods - startSession, close (session), getTSInfo..
+ * Collection of common NJ4X Web service methods - startSession, close (session), getTSInfo..  NJ4X的webservice的集合
  */
 public class BaseWS {
     static final Logger LOGGER = TS.LOGGER;

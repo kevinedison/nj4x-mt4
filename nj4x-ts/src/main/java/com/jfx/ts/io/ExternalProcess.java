@@ -49,6 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Simplifies execution of the external to the current JVM processes.
+ * 简化外部当前JVM进程的执行。
  * User: roman
  * Date: 11.06.2004
  * Time: 17:01:35

@@ -14,15 +14,15 @@ public class LibrariesUtil {
     /**
      * The constant isWindows.
      */
-    public static boolean isWindows;
+    public static boolean isWindows;  //true
     /**
      * The constant isX64.
      */
-    public static boolean isX64;
+    public static boolean isX64;  // true
     /**
      * The constant LIBS_DIR.
      */
-    public static String LIBS_DIR;
+    public static String LIBS_DIR;  //     C:\ProgramData\nj4x\bin
 
     static {
         String osName = System.getProperty("os.name");
@@ -34,7 +34,7 @@ public class LibrariesUtil {
     }
 
     /**
-     * 加载PSUtils_x64.dll这个库
+     * 这个不知道什么意思，把target下的dll的内容写到programData文件夹下的DLL？如果shi复制的话也不需要这么费劲啊
      *
      * @exception IOException the io exception
      */
@@ -49,14 +49,14 @@ public class LibrariesUtil {
         if (!_libFileDir.exists()) {
             _libFileDir.mkdirs();
         }
-        String libFileName = LIBS_DIR + File.separator + dllFileName;
+        String libFileName = LIBS_DIR + File.separator + dllFileName;   //     C:\ProgramData\nj4x\bin\PSUtils_x64.dll
         //
-        URL nativeLibraryUrl = LibrariesUtil.class.getResource(dllFileName);
+        URL nativeLibraryUrl = LibrariesUtil.class.getResource(dllFileName);   // file:/E:/CodeWorkSpace/Java/nj4x-src-2.6.2/nj4x-ts/target/classes/com/jfx/ts/io/PSUtils_x64.dll  这个shijava调用dll的URL吧， 这个机制还不是很清楚，要找资料学习下，但是这个URL和libFileName的路径不一样
         if (nativeLibraryUrl != null) {
             // native library found within JAR, extract and load
 //                    final File libFile = File.createTempFile(dllFileName, ".lib");
 //                    libFile.deleteOnExit(); // just in case, does not work, ShutdownHook does not work as well
-            final File libFile = new File(libFileName);
+            final File libFile = new File(libFileName);   //     C:\ProgramData\nj4x\bin\PSUtils_x64.dll
             //
             final InputStream in = nativeLibraryUrl.openStream();
             final OutputStream out = new BufferedOutputStream(new FileOutputStream(libFile));
@@ -68,7 +68,7 @@ public class LibrariesUtil {
             out.close();
             in.close();
             //
-             System.load(libFile.getAbsolutePath());
+             System.load(libFile.getAbsolutePath()); //加载PSUtil_X64.dll这个dll
             IS_OK = true;
         } // nativeLibraryUrl exists
     }
