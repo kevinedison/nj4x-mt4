@@ -1345,7 +1345,7 @@ public class TSConfigGUI {
                                 }
                             }
                         }
-                        if (totalTerminals == 0) {
+                        if (totalTerminals == 0) {  //总共的连接终端数目为0的时候
                             Vector row = new Vector();
                             row.add(new Integer(-1));
                             row.add(new Integer(-1));

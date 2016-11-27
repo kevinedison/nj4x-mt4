@@ -20,28 +20,64 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
 public class SessionManager {
     private final WeakHashMap<Integer, Long> pidStartTime = new WeakHashMap<>();
+    /**
+     * The Num terminals per session.
+     */
     public int numTerminalsPerSession;
-    Map<Integer, Session> sessionById = new ConcurrentHashMap<Integer, Session>();
-    Map<TsSystemUser, Session> sessionByTsUser = new ConcurrentHashMap<>();
+    /**
+     * T通过id来识别session的map
+     */
+    Map<Integer, Session> sessionById = new ConcurrentHashMap<Integer, Session>(); //
+    /**
+     * 通过tsuser来识别session的map
+     */
+    Map<TsSystemUser, Session> sessionByTsUser = new ConcurrentHashMap<>();//
+    /**
+     * The Max windows sessions.
+     */
     int maxWindowsSessions;
+    /**
+     * The Ts users.
+     */
     HashMap<Integer, TsSystemUser> tsUsers = new HashMap<Integer, TsSystemUser>();
+    /**
+     * The Max user id.
+     */
     int maxUserId = Integer.MIN_VALUE;
     private TS ts;
     private Session localSession;
     private Runnable newSessionCreator;
     private int lastTermsFound = -1;
 
+    /**
+     * Instantiates a new Session manager.
+     *
+     * @param ts the ts
+     */
     public SessionManager(TS ts) {
+
         this.ts = ts;
         localSession = getSessionByIdCreateIfNeeded(PSUtils.localSessionId());
         TS.LOGGER.info("Local session: " + localSession);
     }
 
+    /**
+     * Start rdp client.
+     *
+     * @param tsSystemUser the ts system user
+     *
+     * @exception IOException the io exception
+     */
     public static void StartRDPClient(TsSystemUser tsSystemUser) throws IOException {
         TS.assertProgramExitCode(0, TS.CMDKEY, "/generic:TERMSRV/127.0.0.1", "/user:" + tsSystemUser.name, "/pass:" + tsSystemUser.password);
         PSUtils.startProcess2(TS.MSTSC + " /v 127.0.0.1:" + TS.P_MSTSC_PORT, ".", false, false);
     }
 
+    /**
+     * Gets sessions.
+     *
+     * @return the sessions
+     */
     public Collection<Session> getSessions() {
         return sessionById.values();
     }
@@ -53,6 +89,13 @@ public class SessionManager {
         return tsSystemUser == null ? key : tsSystemUser;
     }
 
+    /**
+     * Gets ts user create template if needed.
+     *
+     * @param id the id
+     *
+     * @return the ts user create template if needed
+     */
     TsSystemUser getTsUserCreateTemplateIfNeeded(int id) {
         TsSystemUser tsSystemUser = tsUsers.get(id);
         if (tsSystemUser == null) {
@@ -66,13 +109,28 @@ public class SessionManager {
         updateTsUser(u);
     }
 
+    /**
+     * Load sessions session manager.
+     *
+     * @return the session manager
+     *
+     * @exception IOException the io exception
+     */
+//加载session
     public SessionManager loadSessions() throws IOException {
         getMaxDesktopsForSharedSection();
         loadExistingSessions();
         return initTerminalsUpdatingJob();
     }
 
+    /**
+     * Init terminals updating job session manager.
+     *
+     * @return the session manager
+     */
+//初始化终端管理的任务
     public SessionManager initTerminalsUpdatingJob() {
+        //初次运行的时候要初始化终端一次
         updateTerminals();
         TS.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             public void run() {
@@ -86,18 +144,22 @@ public class SessionManager {
                         TS.LOGGER.error("Error loading current sessions", e);
                     }
                 }
-                //
                 updateTerminals();
             }
         }, 30, 60, TimeUnit.SECONDS);
         return this;
     }
 
+    /**
+     * Update terminals.
+     */
+//更新终端
     synchronized void updateTerminals() {
         final String dir = TS.getTermDir() + "\\";
         int totalTermsCount = 0;
-        HashMap<Integer, Session> scannedSessions = new HashMap<>();
-        String[] processes = PSUtils.checkProcess2(dir, false, false);
+        HashMap<Integer, Session> scannedSessions = new HashMap<>(); //存储session的map
+        String[] processes = PSUtils.checkProcess2(dir, false, false);  //这个方法是import的，应该是c++的程序
+//        这个进程应该是c++的进程
         for (String process : processes) {
             if (process.startsWith(dir)) {
                 totalTermsCount++;
@@ -106,10 +168,11 @@ public class SessionManager {
                 int pid = pidSession.getPid();
                 Session s = scannedSessions.get(sessionId);
                 if (s == null) {
-                    scannedSessions.put(sessionId, s = new Session(ts, sessionId));
+                    scannedSessions.put(sessionId, s = new Session(ts, sessionId));//如果不存在就存储
                     s.user = sessionId == 0 //|| localSession != null && sessionId == localSession.id
                             ? getTsUserCreateTemplateIfNeeded(0) : new TsSystemUser(ts);
                 }
+                //貌似是给session一个新的线程
                 s.addTermProcessUnsafe(process.substring(0, process.indexOf('\u0001')), pid);
 //            } else if (!ts.mstsc && scannedSessions.size() == 0) {
 //                PidSession pidSession = new PidSession(process).invoke();
@@ -123,7 +186,7 @@ public class SessionManager {
             TS.LOGGER.info("Found " + totalTermsCount + " terminal" + (totalTermsCount > 1 ? "s" : "") + " running");
         }
         //
-        // update real sessions
+        // update real sessions，把这些session存在byid里面
         //
         for (Session _s : scannedSessions.values()) {
             Session s = sessionById.get(_s.id);
@@ -137,6 +200,7 @@ public class SessionManager {
                 s.setTermProcesses(_s);//s.termProcesses = _s.termProcesses;
             }
         }
+        //同步session的map里面的session
         for (Session _s : sessionById.values()) {
             Session s = scannedSessions.get(_s.id);
             if (s == null) {
@@ -153,11 +217,11 @@ public class SessionManager {
         //
         ts.gui.updateTerminals(this);
     }
-
+    //加载存在的session
     private void loadExistingSessions() throws IOException {
         loadExistingSessions(null);
     }
-
+    //加载存在的session
     private void loadExistingSessions(final TsSystemUser user) throws IOException {
         final Set<Integer> _sessions = new HashSet<>();
 
@@ -246,10 +310,10 @@ public class SessionManager {
                 for (Session s : sessionById.values()) {
                     TS.LOGGER.debug("known: " + s.toString());
                 }
-                TS.LOGGER.debug("loadExistingSessions... (user=" + (user == null ? "all" : user.getName()) + ") (Local "+localSession+")");
+                TS.LOGGER.debug("loadExistingSessions... (user=" + (user == null ? "all" : user.getName()) + ") (Local " + localSession + ")");
             }
             for (PSUtils.WtsSessionInfo sessionInfo : sessionInfos) {
-                if (localSession!=null && localSession.id == sessionInfo.id){
+                if (localSession != null && localSession.id == sessionInfo.id) {
                     _sessions.add(sessionInfo.id);
                 } else {
                     if (sessionInfo.id == 0 || !sessionInfo.user.equals("(NULL)")) {
@@ -327,10 +391,24 @@ public class SessionManager {
         return session;
     }
 
+    /**
+     * Gets session by id.
+     *
+     * @param sessionId the session id
+     *
+     * @return the session by id
+     */
     public Session getSessionById(int sessionId) {
         return sessionById.get(sessionId);
     }
 
+    /**
+     * Gets session by pid.
+     *
+     * @param pid the pid
+     *
+     * @return the session by pid
+     */
     public Session getSessionByPID(int pid) {
         for (Session s : sessionById.values()) {
             if (s.isPIDOwner(pid)) {
@@ -340,6 +418,13 @@ public class SessionManager {
         return null;
     }
 
+    /**
+     * Gets pid.
+     *
+     * @param termName the term name
+     *
+     * @return the pid
+     */
     public int getPID(String termName) {
         for (Session s : sessionById.values()) {
             int pid = s.getPID(termName);
@@ -354,12 +439,25 @@ public class SessionManager {
         return -1;
     }
 
+    /**
+     * Remove term process or pid.
+     *
+     * @param processName the process name
+     * @param pid         the pid
+     */
     void removeTermProcessOrPID(String processName, int pid) {
         for (Session s : sessionById.values()) {
             s.removeTermProcessOrPID(processName, pid);
         }
     }
 
+    /**
+     * Gets pid start time.
+     *
+     * @param pid the pid
+     *
+     * @return the pid start time
+     */
     public Long getPIDStartTime(int pid) { // getPID must be called 1st
         synchronized (pidStartTime) {
             return pidStartTime.get(pid);
@@ -367,9 +465,14 @@ public class SessionManager {
     }
 
     /**
+     * Create ts user boolean.
+     *
      * @param id TS user id (1,2,..)
+     *
      * @return true if user has been created, false - if user existed
-     * @throws java.io.IOException
+     *
+     * @exception IOException         the io exception
+     * @exception java.io.IOException
      */
     public synchronized boolean createTsUser(int id) throws IOException {
         boolean isCreated = false;
@@ -401,6 +504,13 @@ public class SessionManager {
         return isCreated;
     }
 
+    /**
+     * Start session.
+     *
+     * @param tsSystemUser the ts system user
+     *
+     * @exception IOException the io exception
+     */
     public synchronized void startSession(TsSystemUser tsSystemUser) throws IOException {
         StartRDPClient(tsSystemUser);
         for (int i = 0; i < 15; ++i) {
@@ -440,6 +550,11 @@ public class SessionManager {
         }
     }
 
+    /**
+     * Update ts user.
+     *
+     * @param u the u
+     */
     public void updateTsUser(TsSystemUser u) {
         if (u.session != null) {
             Session session = sessionById.get(u.session.id);
@@ -502,9 +617,20 @@ public class SessionManager {
         }
         return vsz[0];
     }
+    //这个不知道是干嘛的，要单步调试一下
 
+    /**
+     * csrss.exe通常是系统的正常进程，所在的进程文件是csrss或csrss.exe，是微软客户端、服务端运行时子系统，windows的核心进程之一。管理Windows图形相关任务，对系统的正常运行非常重要。csrss是Client/Server
+     * Runtime Server Subsystem的简称，即客户/服务器运行子系统，用以控制Windows图形相关子系统，必须一直运行。csrss用于维持Windows的控制，创建或者删除线程和一些16位的虚拟MS-DOS环境。也有可能是W32.Netsky.AB@mm等病毒创建的。
+     *
+     * @return max desktops for shared section
+     *
+     * @exception IOException the io exception
+     * @exception IOException
+     */
     int getMaxDesktopsForSharedSection() throws IOException {
         final int sessionViewSize = getSessionViewSize() * 1024;
+        //windows对应的就是csrss.exe
         ExternalProcess p = new ExternalProcess(TS.REG, "query",
                 "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\SubSystems", "/v", "Windows");
         final int[] vsz = new int[1];
@@ -578,6 +704,11 @@ public class SessionManager {
         return vsz[0];
     }
 
+    /**
+     * Load level pct int.
+     *
+     * @return the int
+     */
     public int loadLevelPct() {
         double ll = 0;
         int cnt = 0;
@@ -599,6 +730,11 @@ public class SessionManager {
         return llPct;
     }
 
+    /**
+     * Gets min load session.
+     *
+     * @return the min load session
+     */
     public Session getMinLoadSession() {
         double ll = 0;
         int cnt = 0;
@@ -644,10 +780,21 @@ public class SessionManager {
         return minLoadSession;
     }
 
+    /**
+     * Gets local session.
+     *
+     * @return the local session
+     */
     public Session getLocalSession() {
         return localSession;
     }
 
+    /**
+     * Init ts users.
+     *
+     * @exception IOException the io exception
+     */
+//  初始化Ts的users
     public void initTsUsers() throws IOException {
         int id = 1;
         //noinspection StatementWithEmptyBody

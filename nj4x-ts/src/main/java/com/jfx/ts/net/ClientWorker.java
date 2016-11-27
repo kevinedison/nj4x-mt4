@@ -22,6 +22,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
+ * 每个连线终端的工作
  * User: roman
  * Date: 05/08/2014
  * Time: 21:54
@@ -33,10 +34,12 @@ public class ClientWorker {
     static final String PROXY_LOGIN;
     static final String PROXY_PASSWORD;
     static final Hashtable initTerms = new Hashtable();
-    private final static ConcurrentHashMap<String, Set<String>> brokersByHosts = new ConcurrentHashMap<>();
-    private final static ConcurrentHashMap<Integer, ProcessToFollow> fpMap = new ConcurrentHashMap<>();
-    private final static ConcurrentLinkedQueue<ProcessToFollow> fpQueue = new ConcurrentLinkedQueue<>();
-    private final static Set<String> fpBrokers = Collections.synchronizedSet(new HashSet<String>()); // brokers followed for 5 minutes
+    private final static ConcurrentHashMap<String, Set<String>> brokersByHosts = new ConcurrentHashMap<>();  //代理MAP，使用host来识别的
+    private final static ConcurrentHashMap<Integer, ProcessToFollow> fpMap = new ConcurrentHashMap<>();   //不知道是什么Map
+    //它是一个基于链接节点的无界线程安全队列。该队列的元素遵循先进先出的原则。头是最先加入的，尾是最近加入的。
+//    插入元素是追加到尾上。提取一个元素是从头提取
+    private final static ConcurrentLinkedQueue<ProcessToFollow> fpQueue = new ConcurrentLinkedQueue<>();  //不知道是什么队列
+    private final static Set<String> fpBrokers = Collections.synchronizedSet(new HashSet<String>()); // brokers followed for 5 minutes 超过5min的代理
 
     static {
         PROXY_SERVER = System.getenv("JFX_PROXY_SERVER");
@@ -46,7 +49,9 @@ public class ClientWorker {
     }
 
     static {
+
         TS.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            //日志的压缩
             {
                 try {
                     Path log = Paths.get(TS.JFX_HOME).resolve("log").resolve("jfx_term_hosts.log");
@@ -67,46 +72,52 @@ public class ClientWorker {
 
             String lastReport = null;
 
+            //这个应该是负责通信的功能
             public void run() {
-                boolean someBrokersFinished = false;
-                ArrayList<ProcessToFollow> putBack = new ArrayList<>();
+                boolean someBrokersFinished = false;//是不是有代理结束连接了
+                //ProcessToFollow这个类是记录代理的，应该是这样的
+                ArrayList<ProcessToFollow> putBack = new ArrayList<>();//这个对象负责要回退的对象吧
                 ProcessToFollow processToFollow;
+                //poll 获取并移除此队列的头 ，如果此队列为空，则返回 null
                 while ((processToFollow = fpQueue.poll()) != null) {
-                    if (processToFollow.totalTime() > MONITOR_TIME_SECONDS) {
+                    if (processToFollow.totalTime() > MONITOR_TIME_SECONDS) { //存在的时间大于300，监视的时间300秒
                         someBrokersFinished = true;
-                        fpMap.remove(processToFollow.pid);
-                        fpBrokers.add(processToFollow.brokerId);
+                        fpMap.remove(processToFollow.pid);//去除
+                        fpBrokers.add(processToFollow.brokerId);//增加
                         continue;
                     }
+                    //如果不存在这个东西
                     if (!fpBrokers.contains(processToFollow.brokerId)) {
+                        //应该是C++通过底层的PID来找到网络连接信息的，原理就是netstat
                         PSUtils.MibTcpRowOwnerPid[] netStats = PSUtils.currentProcessConnections(processToFollow.pid);
                         if (netStats.length == 0) {
                             someBrokersFinished = true;
-                            fpMap.remove(processToFollow.pid);
+                            fpMap.remove(processToFollow.pid);//建立连接失败
                             continue;
                         }
-                        putBack.add(processToFollow);
+                        putBack.add(processToFollow);//回退这个添加目前的工作进程、
+                        //遍历这个连接的信息
                         for (PSUtils.MibTcpRowOwnerPid ns : netStats) {
-                            String remoteAddress = ns.getRemoteAddress();
+                            String remoteAddress = ns.getRemoteAddress();//获取远程连接地址
                             if (!remoteAddress.equals(processToFollow.jfxHost)) {
                                 String hostPort = remoteAddress + ":" + ns.remotePort;
                                 //
-                                Set<String> brokers = brokersByHosts.get(hostPort);
+                                Set<String> brokers = brokersByHosts.get(hostPort);//根据远程地址存储代理节点
                                 if (brokers == null) {
                                     Set<String> _b = Collections.synchronizedSet(new HashSet<String>());
                                     if ((brokers = brokersByHosts.putIfAbsent(hostPort, _b)) == null) {
                                         brokers = _b;
                                     }
                                 }
-                                brokers.add(processToFollow.brokerId);
+                                brokers.add(processToFollow.brokerId);//这一步不知道干嘛的
                             }
                         }
                     }
                 }
-                for (ProcessToFollow p : putBack) fpQueue.offer(p);
+                for (ProcessToFollow p : putBack) fpQueue.offer(p);//在尾部添加
                 //
-                if (someBrokersFinished) {
-                    String report = getReport();
+                if (someBrokersFinished) {//someBrokersFinished的意思是代理连接完成，可以传输数据了，我感觉是这样的
+                    String report = getReport();//不知道这个repot是干嘛的，貌似是生成日志的
                     if (lastReport == null || !lastReport.equals(report)) {
                         try {
                             TS.LOGGER.info("Updating jfx_term_hosts.log");
@@ -1148,7 +1159,7 @@ public class ClientWorker {
         return cnt;
     }
 
-    private static class CountTermsExpToken{
+    private static class CountTermsExpToken {
         public int token;
         public long startTime;
 
@@ -1161,8 +1172,10 @@ public class ClientWorker {
             return System.currentTimeMillis() - startTime > 5;
         }
     }
+
     private static final AtomicInteger countTermsToken = new AtomicInteger(100000);
     private static final HashMap<String, List<CountTermsExpToken>> countTermsTokens = new HashMap<>();
+
     protected int[] countTerminals(String broker, String account) throws IOException {
         String brokerPrefix = TerminalParams.brokerToDirName(broker) + ' ';
         String accountPrefix = brokerPrefix + account + ' ';
@@ -1233,7 +1246,7 @@ public class ClientWorker {
     }
 
     private void removeExpired(List<CountTermsExpToken> accountExpTokens) {
-        for (Iterator<CountTermsExpToken> i = accountExpTokens.iterator(); i.hasNext();){
+        for (Iterator<CountTermsExpToken> i = accountExpTokens.iterator(); i.hasNext(); ) {
             if (i.next().isExpired()) {
                 i.remove();
             }
@@ -1461,6 +1474,7 @@ public class ClientWorker {
         }
     }
 
+    //这个私有类应该是标识代理的
     private static class ProcessToFollow {
         int pid;
         String brokerId;
@@ -1473,7 +1487,7 @@ public class ClientWorker {
             this.jfxHost = jfxHost;
             startTime = System.currentTimeMillis();
         }
-
+        //计算这个代理存在了多长时间了
         public int totalTime() {
             return (int) ((System.currentTimeMillis() - startTime) / 1000);
         }

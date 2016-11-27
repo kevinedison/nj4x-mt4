@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 这个是session类
  * todo: comments
  * User: roman
  * Date: 05/08/2014m
@@ -70,7 +71,7 @@ public class Session {
     public Map<String, Integer> getTermProcesses() {
         return termProcesses;
     }
-
+    //貌似是要重新开一个session的线程
     public void setTermProcesses(Session _s) {
         ConcurrentHashMap<String, Integer> currentTermProcesses = this.termProcesses;
         HashSet<Integer> pidToRemove = new HashSet<>();

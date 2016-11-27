@@ -3,6 +3,7 @@ package com.jfx.ts.net;
 import com.jfx.ts.io.PSUtils;
 
 /**
+ * 这个应该是一个终端的描述
  * Created by roman on 21.10.2016.
  */
 class PidSession {
@@ -22,7 +23,7 @@ class PidSession {
     public int getPid() {
         return pid;
     }
-
+    //貌似是计算pid的
     public PidSession invoke() {
         try {
             String _sessionId = process.substring(process.indexOf('\u0001') + 1);

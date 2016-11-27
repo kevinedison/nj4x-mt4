@@ -151,7 +151,7 @@ public class PSUtils {
     public static enum MibState {
         NO_CONNECTIONS_DETECTED, CLOSED, LISTEN, SYN_SENT, SYN_RCVD, ESTAB, FIN_WAIT1, FIN_WAIT2, CLOSE_WAIT, CLOSING, LAST_ACK, TIME_WAIT, DELETE_TCB;
     }
-
+    //这个是TCP连接的对象
     public static class MibTcpRowOwnerPid {
         public int state, localAddr, localPort, remoteAddr, remotePort, pid;
 
@@ -263,8 +263,9 @@ public class PSUtils {
         }
         return true;
     }
-
+    //TCP连接的函数
     public static MibTcpRowOwnerPid[] currentProcessConnections(int pid) {
+        //通过PID来获取连接的
         PSUtils.MibTcpRowOwnerPid[] netStats = getProcessConnections(pid);
         return netStats == null ? new PSUtils.MibTcpRowOwnerPid[0] : netStats;
     }

@@ -1129,7 +1129,7 @@ public class TS {
         }
         //
         if (P_USE_MSTSC) {
-            initMstscMode();
+            initMstscMode();  //初始化MSTSC模式，应该是远程模式吧，主要是初始化session的连接
         } else {
             sessionManager = new SessionManager(this);
             sessionManager.getMaxDesktopsForSharedSection();
@@ -1407,7 +1407,7 @@ public class TS {
             //
             if (canNotUseMstsc(null)) return;
             //
-            loadTsUsers();
+            loadTsUsers(); //初始化Ts的suers，主要是初始化sessionmanager
             mstsc = true;
             LOGGER.info("MSTSC mode initialization succeded");
         } finally {
@@ -1549,6 +1549,7 @@ com.sun.management.jmxremote.ssl=false
 
     private void loadTsUsers() throws IOException {
         sessionManager = new SessionManager(this);
+        //这个就是要加载session
         sessionManager.loadSessions().initTsUsers();
     }
 
@@ -2278,7 +2279,7 @@ com.sun.management.jmxremote.ssl=false
 //        pause("Process is not running: [" + terminalProcessName + "]");
     }
 
-    private final HashMap<Long, ClientWorker> clients = new HashMap<>();
+    private final HashMap<Long, ClientWorker> clients = new HashMap<>();  //存储clients的
     private long lastToken = System.currentTimeMillis();
     private Future clientsCleanerJob = null;
     /**
@@ -2287,17 +2288,17 @@ com.sun.management.jmxremote.ssl=false
     public static final int SESSION_TIMEOUT_MILLIS = 60000;
 
     /**
-     * New client worker client worker.
+     * 开始一个新的终端的工作，这个是具体的开始工作
      *
      * @param cInfo the c info
      *
      * @return the client worker
      */
-    public ClientWorker newClientWorker(Nj4xClientInfo cInfo) {
+    public ClientWorker newClientWorker(Nj4xClientInfo cInfo) {  //Nj4xClientInfo这个类很简单
         ClientWorker cw;
         synchronized (clients) {
-            long token = ++lastToken;
-            cw = new ClientWorker(this, token, cInfo);
+            long token = ++lastToken;//token就是当前连接的一个标识
+            cw = new ClientWorker(this, token, cInfo);//实例化一个终端工作对象
             clients.put(token, cw);
             //
             if (clientsCleanerJob == null) {
@@ -2310,14 +2311,16 @@ com.sun.management.jmxremote.ssl=false
                             } catch (InterruptedException e) {
                             }
                             //
-                            ArrayList<Long> toDelete = new ArrayList<Long>();
+                            ArrayList<Long> toDelete = new ArrayList<Long>();//实例化一个要删除的终端list
                             synchronized (clients) {
                                 for (Map.Entry<Long, ClientWorker> e : clients.entrySet()) {
+                                    //如果上一次的通信事件到现在的时间大于60000就断掉连接
                                     if (e.getValue().getLastUsageTimeIntervalMillis() > SESSION_TIMEOUT_MILLIS) {
                                         toDelete.add(e.getKey());
                                     }
                                 }
                                 for (Long token : toDelete) {
+                                    //提示连接断掉了，直接删掉client
                                     TS.LOGGER.warn("Client session timed out: token=" + token + ", client=" + clients.get(token));
                                     clients.remove(token);
                                 }

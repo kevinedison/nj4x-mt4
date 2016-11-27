@@ -24,12 +24,12 @@ public class BaseWS {
     }
 
     /**
-     * Opens new session to the Web service.
+     * Opens new session to the Web service.连接一个新的session，客户端请求的数据
      * @param cInfo client information
      * @return session ID, required by all subsequent Web service methods.
      */
     @SuppressWarnings("UnusedDeclaration")
-    @WebMethod
+    @WebMethod  //这个是webservice的注解
     public long startSession(@WebParam(name = "clientInfo") Nj4xClientInfo cInfo) {
         if (cInfo != null) {
             if (cInfo.apiVersion.compareTo(TerminalServer.MINIMUM_CLIENT_VERSION) < 0) {
