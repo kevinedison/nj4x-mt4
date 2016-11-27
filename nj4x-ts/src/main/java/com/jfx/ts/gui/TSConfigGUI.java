@@ -201,7 +201,7 @@ public class TSConfigGUI {
         //每一秒执行一次
         TS.scheduledExecutorService.schedule(new Runnable() {
             public void run() {
-//                将正在连接的终端列表下乳这个map
+//                将正在连接的终端列表下这个map
                 final HashMap<String, TerminalParams> tp = new HashMap<>();
                 synchronized (connectionsInProgress) {
                     for (TerminalParams p : connectionsInProgress) {

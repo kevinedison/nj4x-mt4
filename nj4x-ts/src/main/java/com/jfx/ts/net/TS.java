@@ -166,6 +166,7 @@ public class TS {
     static {
         try {
             //不知道为什么要外部程序，不知道是干什么的，跑起来之后看看hostname是个什么鬼
+            //但是这个是简化外部当前JVM进程的执行。
             ExternalProcess p = new ExternalProcess("hostname");
             p.run();
             TS.hostname = p.getOut().trim();
@@ -176,7 +177,7 @@ public class TS {
     }
 
     static {
-        //貌似是初始化JFX的HOME路径，也许是
+        //貌似是初始化JFX的HOME路径
         JFX_HOME = System.getProperty("home", System.getProperty("user.home") + File.separatorChar + "jfx_term");
         System.setProperty("home", JFX_HOME);
         String tmout = System.getenv("JFX_TERM_IDLE_TMOUT_SECONDS");

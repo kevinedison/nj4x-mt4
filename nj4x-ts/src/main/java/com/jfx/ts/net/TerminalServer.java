@@ -154,7 +154,7 @@ public class TerminalServer {
             //
             // *********************************************************************
             //
-            //最大连接数线程数，不知道为什么要搞得这么负责
+            //最大线程数，不知道为什么要搞得这么复杂
             MAX_TERMINAL_STARTUP_THREADS = Integer.parseInt(System.getProperty("max_terminal_connection_threads", "" +
                     (AVAILABLE_PROCESSORS >= 24 ? AVAILABLE_PROCESSORS / 2
                             : (AVAILABLE_PROCESSORS >= 12 ? AVAILABLE_PROCESSORS / 3
