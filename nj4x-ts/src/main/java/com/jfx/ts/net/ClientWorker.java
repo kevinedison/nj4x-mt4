@@ -187,7 +187,7 @@ public class ClientWorker {
         this.ts = ts;
         this.token = token;
         this.cInfo = cInfo;
-        this.threadUseStart = System.currentTimeMillis();
+        this.threadUseStart = System.currentTimeMillis();//线程的开始时间
     }
 
     static String getSymbolsDir(String rootDir) /*throws IOException */ {

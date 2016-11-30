@@ -45,7 +45,7 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-
+//这个类应该是做操作系统操作的类
 public class BoxUtils {
     public static boolean isX64;
     public static boolean isWindows;

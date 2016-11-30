@@ -160,7 +160,7 @@ public class SessionManager {
         HashMap<Integer, Session> scannedSessions = new HashMap<>(); //存储session的map
         String[] processes = PSUtils.checkProcess2(dir, false, false);  //这个方法是import的，应该是c++的程序
 //        这个进程应该是c++的进程
-        for (String process : processes) {
+        for (String process : processes) { //processes是计算机所有的进程
             if (process.startsWith(dir)) {
                 totalTermsCount++;
                 PidSession pidSession = new PidSession(process);

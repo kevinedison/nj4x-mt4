@@ -255,7 +255,7 @@ public class PSUtils {
     public static native boolean isAdministrator();  //标识符native可以与所有其它的java标识符连用，但是abstract除外。这是合理的，因为native暗示这些方法是有实现体的，只不过这些实现体是非java的，但是abstract却显然的指明这些方法无实现体。native与其它java标识符连用时，其意义同非Native Method并无差别。
 
     public static boolean asAdministrator() {
-        if (!isAdministrator()) {
+        if (!isAdministrator()) {   //这个方法也是C++的本地方法
             String compat_layer = System.getenv().get("__COMPAT_LAYER");
             if (compat_layer == null || !compat_layer.contains("RunAsAdmin")) {
                 return false;

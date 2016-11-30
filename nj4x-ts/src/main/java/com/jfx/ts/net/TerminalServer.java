@@ -137,7 +137,7 @@ public class TerminalServer {
             //
             // sun.java.command=C:\nj4x\bin\nj4x-ts-2.4.9.exe use_mstsc true port 1054
             //
-            boolean asAdministrator = false;
+            boolean asAdministrator = false;  //false
             try {
                 LibrariesUtil.initEmbeddedLibraries();   //加载PSUtils_x64.dll这个库，具体这个库是干嘛的还不知道
                 asAdministrator = PSUtils.asAdministrator();   //判断是不是以管理员身份运行的，其目的还不知道
@@ -154,7 +154,7 @@ public class TerminalServer {
             //
             // *********************************************************************
             //
-            //最大连接数线程数，不知道为什么要搞得这么负责
+            //最大连接数线程数，不知道为什么要搞得这么复杂
             MAX_TERMINAL_STARTUP_THREADS = Integer.parseInt(System.getProperty("max_terminal_connection_threads", "" +
                     (AVAILABLE_PROCESSORS >= 24 ? AVAILABLE_PROCESSORS / 2
                             : (AVAILABLE_PROCESSORS >= 12 ? AVAILABLE_PROCESSORS / 3
@@ -172,8 +172,8 @@ public class TerminalServer {
                         }
                     });
             //
-            IS_DEPLOY_EA_WS = System.getProperty("deploy_EA_WS", "false").equals("true");
-            final String port = System.getProperty("port", "7788");
+            IS_DEPLOY_EA_WS = System.getProperty("deploy_EA_WS", "false").equals("true");//false
+            final String port = System.getProperty("port", "7788");//端口是7788
             if (port == null) {
                 //noinspection SpellCheckingInspection
                 System.err.println("Wrong Parameters: -Dport");

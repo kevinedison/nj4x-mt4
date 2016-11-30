@@ -30,7 +30,7 @@ public class BaseWS {
      */
     @SuppressWarnings("UnusedDeclaration")
     @WebMethod  //这个是webservice的注解
-    public long startSession(@WebParam(name = "clientInfo") Nj4xClientInfo cInfo) {
+    public long startSession(@WebParam(name = "clientInfo") Nj4xClientInfo cInfo) { //只有一个名字和API的版本
         if (cInfo != null) {
             if (cInfo.apiVersion.compareTo(TerminalServer.MINIMUM_CLIENT_VERSION) < 0) {
                 String m = cInfo.clientName + "> Unsupported NJ4X API version: " + cInfo.apiVersion + " <= " + TerminalServer.MINIMUM_CLIENT_VERSION;

@@ -42,7 +42,7 @@ class ListenerThread extends Thread {
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
-                final Socket socket = serverSocket.accept();
+                final Socket socket = serverSocket.accept();  //不知道7789是什么端口
                 //
                 socket.setTcpNoDelay(true);
                 ClientWorkerThread clientWorkerThread = new ClientWorkerThread(ts, socket);

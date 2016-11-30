@@ -1111,7 +1111,7 @@ public class TS {
             }
             //
             try {
-                initTerminalDirectoryFromZip(JFX_HOME + File.separatorChar);  //配置终端的文件
+                initTerminalDirectoryFromZip(JFX_HOME + File.separatorChar);  //配置终端的文件以及配置窗体的个各种显示
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1120,7 +1120,7 @@ public class TS {
         initCloudDirectories();  //貌似是配置云端的文件夹之类的，但是不知道有什么用
         //
         if (!P_GUI_ONLY) {
-            System.setProperty(JMXServer.JMX_IMPL_CLASS, JMXServer.MX4J_IMPL_CLASS);
+            System.setProperty(JMXServer.JMX_IMPL_CLASS, JMXServer.MX4J_IMPL_CLASS);//JMX_IMPL_CLASS：jmx.impl.class。MX4J_IMPL_CLASS：com.jfx.ts.jmx.mx4j.JMXServerImpl
             System.setProperty(JMXServer.MX4J_CONFIG_XML, JMX_CONFIG_XML);    //mbean.xml文件是MT4的配置文件，至少从这个上面看是的
             try {
                 JMXServer.getInstance();
@@ -2301,7 +2301,7 @@ com.sun.management.jmxremote.ssl=false
             cw = new ClientWorker(this, token, cInfo);//实例化一个终端工作对象
             clients.put(token, cw);
             //
-            if (clientsCleanerJob == null) {
+            if (clientsCleanerJob == null) {  //这个居然不为空
                 clientsCleanerJob = TerminalServer.CACHED_THREAD_POOL.submit(new Runnable() {
                     @Override
                     public void run() {

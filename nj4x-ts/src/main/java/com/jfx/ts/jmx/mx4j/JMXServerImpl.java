@@ -48,7 +48,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.lang.reflect.Method;
-
+//JMXServer的实现
 public class JMXServerImpl extends JMXServer {
     //
     private javax.management.MBeanServer server;

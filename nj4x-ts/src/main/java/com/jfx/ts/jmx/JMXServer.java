@@ -44,7 +44,7 @@ import javax.management.*;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Hashtable;
-
+//JMX（Java Management Extensions，即Java管理扩展）是一个为应用程序、设备、系统等植入管理功能的框架。JMX可以跨越一系列异构操作系统平台、系统体系结构和网络传输协议，灵活的开发无缝集成的系统、网络和服务管理应用。
 public class JMXServer {
     //
     public static final String JAVAX_MANAGEMENT_BUILDER_INITIAL = "javax.management.builder.initial";
