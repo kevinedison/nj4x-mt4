@@ -64,11 +64,11 @@ public class LibrariesUtil {
             int len;
             byte[] buffer = new byte[160000];
             while ((len = in.read(buffer)) > -1)
-                out.write(buffer, 0, len);  //不知道写这个干嘛
+                out.write(buffer, 0, len);  //写入dll文件
             out.close();
             in.close();
             //
-             System.load(libFile.getAbsolutePath()); //加载PSUtil_X64.dll这个dll
+            System.load(libFile.getAbsolutePath()); //加载PSUtil_X64.dll这个dll
             IS_OK = true;
         } // nativeLibraryUrl exists
     }
