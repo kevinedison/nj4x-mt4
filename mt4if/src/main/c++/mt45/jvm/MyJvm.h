@@ -35,6 +35,7 @@
  *  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
  */
+//连接JVM的类
 #pragma once
 #ifdef USE_JVM
 

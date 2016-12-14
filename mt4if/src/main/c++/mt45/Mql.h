@@ -35,6 +35,9 @@
  *  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
  */
+
+
+//这个是行情的类
 #pragma once
 #ifndef Mql_H
 #define Mql_H

@@ -36,6 +36,7 @@
  *  SUCH DAMAGE.
  */
 // dllmain.cpp : Defines the entry point for the DLL application.
+// 定义函数入口
 #include "stdafx.h"
 #include "box_id.h"
 

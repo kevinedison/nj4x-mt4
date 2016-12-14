@@ -36,6 +36,7 @@
  *  SUCH DAMAGE.
  */
 // mt45if.cpp : Defines the exported functions for the DLL application.
+//定义了外部的函数接口
 //
 
 #include "stdafx.h"

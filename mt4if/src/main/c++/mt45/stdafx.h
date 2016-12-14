@@ -91,7 +91,7 @@ EXTERN_C int WINAPI GetModuleFullName(
 	__in  int nMaxChars);
 
 #define MT4_EXPFUNC __declspec(dllexport)
-
+//确定了让外部调用的函数
 extern "C" MT4_EXPFUNC wchar_t const* __stdcall jfxConnect(wchar_t const* symbol, int period, wchar_t const* strategy);
 extern "C" MT4_EXPFUNC void __stdcall jfxDisconnect(wchar_t const* sessID);
 extern "C" MT4_EXPFUNC int __stdcall jfxGetCommand(wchar_t const* sessionID, wchar_t* p1, wchar_t* p2, wchar_t* p3, wchar_t* p4, wchar_t* p5, wchar_t* p6, wchar_t* p7, wchar_t* p8, wchar_t* p9, wchar_t* p10, wchar_t* p11, wchar_t* p12, wchar_t* p13, wchar_t* p14, wchar_t* p15);
