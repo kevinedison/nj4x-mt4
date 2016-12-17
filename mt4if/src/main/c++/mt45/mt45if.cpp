@@ -946,7 +946,7 @@ MT4_EXPFUNC int __stdcall jfxMqlRatesAdd(wchar_t const* sessID, MqlRates* rates)
 	//
 	return 1;
 }
-
+//Res是什么意思还不知道
 MT4_EXPFUNC wchar_t const* __stdcall jfxMqlRatesRes(wchar_t const* sessID)
 {
 	Client* c = GetClient(sessID);

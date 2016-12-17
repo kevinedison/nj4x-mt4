@@ -636,7 +636,7 @@ void debug(const char* fmt, const wchar_t* p1)
 	debug(fmt, tombs(p1, b1));
 }
 
-#define SOCKET_LOG "logs\\socket.log"
+#define SOCKET_LOG "logs\\socket.log"	//日志的文件名
 #define SOCKET_LOG_BAK "logs\\socket.-1.log"
 //#define SOCKET_LOG "socket.log"
 //#define SOCKET_LOG_BAK "socket.-1.log"
@@ -884,7 +884,7 @@ EXTERN_C int WINAPI GetModuleFullName(
 	DWORD dwStatus = NO_ERROR;
 
 	//
-	// Validate parameters:
+	// Validate parameters:检验参数
 	//
 	if (dwStatus == NO_ERROR)
 	{
@@ -900,7 +900,7 @@ EXTERN_C int WINAPI GetModuleFullName(
 	}
 
 	//
-	// Determine required buffer size when requested:
+	// Determine required buffer size when requested:确定请求的buffer的大小
 	//
 	int nLength = 0;
 
@@ -969,6 +969,7 @@ EXTERN_C int WINAPI GetModuleFullName(
 
 			//
 			// Free the temporary buffer if allocated:
+			//清除缓存
 			//
 			if (psz_buffer != cwBuffer)
 			{
@@ -980,6 +981,7 @@ EXTERN_C int WINAPI GetModuleFullName(
 
 	//
 	// Get the module's full name and pointer to file name when requested:
+	// 获取模型的全名和文件名
 	//
 	if (dwStatus == NO_ERROR)
 	{
@@ -995,6 +997,7 @@ EXTERN_C int WINAPI GetModuleFullName(
 
 	//
 	// Return full name length or 0 on error:
+	// 返回全称的长度
 	//
 	if (dwStatus != NO_ERROR)
 	{
@@ -1005,7 +1008,7 @@ EXTERN_C int WINAPI GetModuleFullName(
 
 	return nLength;
 }
-
+//不知道干嘛的
 void pinModule(HMODULE hModule)
 {
 	BOOL w = false;

@@ -54,12 +54,12 @@ extern void debug(const char* fmt, ...);
 extern void printStats(const char* msg, bool init);
 
 extern size_t mywcstombs(const wchar_t* res, char* b, size_t csz);
-
+//字符串的结构体，这个应该是mql的语言
 struct MqlStr {
     int  len;
     char *str;
 };
-
+//汇率
 struct MqlRates
 {
 	int		time;         // Period start time
@@ -87,7 +87,7 @@ struct MqlRates
 #define MASK_PROFIT		1024
 #define MASK_COMMISSION	2048
 #define MASK_SWAP		4096
-
+//周期
 enum StatPeriod
 {
 	SECOND,
@@ -100,6 +100,7 @@ enum StatPeriod
 
 struct PeriodStats
 {
+	//获取周期
 	static __int64 toStatPeriod(__int64 millis, StatPeriod period)
 	{
 		switch (period)
@@ -132,7 +133,7 @@ struct PeriodStats
 	}
 
 
-	//
+	//每个周期有多少秒
 	int PeriodSeconds()
 	{
 		switch (period)
@@ -153,7 +154,7 @@ struct PeriodStats
 		}
 		return 1;
 	}
-
+	//周期开始时间
 	int TimeBeginSeconds()
 	{
 		if (period == StatPeriod::TOTAL)
@@ -162,7 +163,7 @@ struct PeriodStats
 		}
 		return time / 1000;
 	}
-
+	//周期结束的时间
 	int TimeEndSeconds()
 	{
 		if (period == StatPeriod::TOTAL)
@@ -171,19 +172,19 @@ struct PeriodStats
 		}
 		return TimeBeginSeconds() + PeriodSeconds();
 	}
-
+	//初始化周期
 	void Init(__int64 millis, StatPeriod p)
 	{
 		period = p;
 		time = toStatPeriod(startTime = millis, p);
 	}
-
+	//设置开始时间
 	void Begin(__int64 startTime)
 	{
 		_startTime = startTime;
 	}
 
-	//
+	//设置结束
 	void End(__int64 endTime)
 	{
 		numRequests++;
@@ -191,13 +192,13 @@ struct PeriodStats
 		time = toStatPeriod(endTime, period);
 	}
 
-	//
+	//不知道为什么要加
 	void AddMax(PeriodStats s)
 	{
 		if (time != s.time)
 		{
 			time = s.time;
-			execTime = numRequests > s.numRequests ? execTime : s.execTime;
+			execTime = numRequests > s.numRequests ? execTime : s.execTime;//取最大值
 			numRequests = numRequests > s.numRequests ? numRequests : s.numRequests;
 		}
 	}
@@ -213,31 +214,31 @@ struct PeriodStats
 		}
 	}
 
-	//
+	//这个方法是返回csv的头部字符串
 	int ToStringHeader(char* buf, size_t sz)
 	{
 		sprintf_s(buf, sz, "\t\t%s\t%s\t%s\t%s\t%s\t%s",
 			"Period", "NumReq", "ExTime", "TPS", "TimeFrom", "TimeTo    "
 			);
-		return strlen(buf);
+		return strlen(buf);//返回字符串的长度
 	}
 
-	//
+	//返回行情
 	int ToString(char* buf, size_t sz)
 	{
 		sprintf_s(buf, sz, "\t\t%u\t%llu\t%llu\t%.4g\t%u\t%u",
 			PeriodSeconds(), numRequests, execTime, (static_cast<double>(numRequests) / PeriodSeconds()), TimeBeginSeconds(), TimeEndSeconds()
 			);
-		return strlen(buf);
+		return strlen(buf);//返回字符串的程度
 	}
 
-	//
+	//返回CSV
 	int ToCSV(char* buf, size_t sz)
 	{
 		sprintf_s(buf, sz, ",%u,%llu,%llu,%.4g,%u,%u",
 			PeriodSeconds(), numRequests, execTime, (static_cast<double>(numRequests) / PeriodSeconds()), TimeBeginSeconds(), TimeEndSeconds()
 			);
-		return strlen(buf);
+		return strlen(buf);//返回字符串的程度
 	}
 };
 
@@ -251,13 +252,13 @@ public:
 	//PeriodStats minimums[StatPeriod::TOTAL];
 	PeriodStats maximums[StatPeriod::TOTAL];
 
-	CmdStats(int _cmd)
+	CmdStats(int _cmd)//构造函数
 	{
 		cmd = _cmd;
-		startTime = Util::currentTimeMillis();
+		startTime = Util::currentTimeMillis();//目前是开始时间
 		//
-		total.Init(startTime, StatPeriod::TOTAL);
-		//
+		total.Init(startTime, StatPeriod::TOTAL);//初始化周期
+		//默认支持这些周期
 		current[StatPeriod::SECOND].Init(startTime, StatPeriod::SECOND);
 		current[StatPeriod::MINUTE].Init(startTime, StatPeriod::MINUTE);
 		current[StatPeriod::MINUTES_5].Init(startTime, StatPeriod::MINUTES_5);
@@ -277,7 +278,7 @@ public:
 		maximums[StatPeriod::MINUTES_30].Init(startTime, StatPeriod::MINUTES_30);
 	}
 
-	void Begin()
+	void Begin()//开始
 	{
 		__int64 now = Util::currentTimeMillis();
 		total.Begin(now);
@@ -287,9 +288,9 @@ public:
 		}
 	}
 
-	void End(__int64 now)
+	void End(__int64 now)//结束
 	{
-		total.End(now);
+		total.End(now);//所有的周期都在这个时候结束了
 		for (int i = StatPeriod::SECOND; i < StatPeriod::TOTAL; ++i)
 		{
 			__int64 t = current[i].time;
@@ -303,7 +304,7 @@ public:
 			}
 		}
 	}
-
+	//头
 	void ToStringHeader(char* buf, size_t sz)
 	{
 		sprintf_s(buf, sz, "%s",
@@ -316,7 +317,7 @@ public:
 			len += maximums[i].ToStringHeader(buf + len, sz - len);
 		}
 	}
-
+	//中间数据
 	void ToString(char* buf, size_t sz)
 	{
 		sprintf_s(buf, sz, "%05d",
@@ -329,7 +330,7 @@ public:
 			len += maximums[i].ToString(buf + len, sz - len);
 		}
 	}
-
+	//转换为CSV
 	void ToCSV(char* buf, size_t sz)
 	{
 		sprintf_s(buf, sz, "%05d",
@@ -344,7 +345,7 @@ public:
 	}
 };
 
-class Rate
+class Rate //汇率类
 {
 	int time; // Period start time
 	double open; // Open price
@@ -355,7 +356,7 @@ class Rate
 	int spread; // Spread
 	long real_volume; // Trade volume
 public:
-	Rate(MqlRates* rates)
+	Rate(MqlRates* rates)//构造函数
 	{
 		time = rates->time;
 		open = rates->open;
@@ -366,7 +367,7 @@ public:
 		spread = rates->spread;
 		real_volume = rates->real_volume;
 	}
-
+	//tostring函数
 	int ToString(char* info, int sz)
 	{
 		int charsWritten = sprintf_s(info, sz, "\x01%d|%.8g|%.8g|%.8g|%.8g|%ld|%d|%ld\x02"
@@ -374,7 +375,7 @@ public:
 			);
 		return charsWritten;
 	}
-
+	//获取字符串的长度
 	int GetStringLength()
 	{
 		int charsWritten = _snprintf(nullptr, 0, "\x01%d|%.8g|%.8g|%.8g|%.8g|%ld|%d|%ld\x02"
@@ -383,7 +384,7 @@ public:
 		return charsWritten;
 	}
 };
-
+//订单类
 class Order
 {
 	long diffBitMap;
@@ -395,7 +396,7 @@ public:
 	wchar_t symbol[MAX_SYMBOL_SZ];
 	wchar_t comment[MAX_COMMENT_SZ];
 
-	Order()
+	Order()//构造函数
 	{
 		ticket = type = openTime = closeTime = magic = expiration = 0;
 		diffBitMap = 0;
@@ -405,20 +406,20 @@ public:
 		_sent = false;
 	}
 
-	Order(int _ticket, int _type, int _openTime, int _closeTime, int _magic, int _expiration, wchar_t const* _symbol, wchar_t const* _comment, double _lots, double _openPrice, double _closePrice, double _sl, double _tp, double _profit, double _commission, double _swap)
+	Order(int _ticket, int _type, int _openTime, int _closeTime, int _magic, int _expiration, wchar_t const* _symbol, wchar_t const* _comment, double _lots, double _openPrice, double _closePrice, double _sl, double _tp, double _profit, double _commission, double _swap)//构造
 	{
 		_sent = false;
 		diffBitMap = 0;
 		reset(_ticket, _type, _openTime, _closeTime, _magic, _expiration, _symbol, _comment, _lots, _openPrice, _closePrice, _sl, _tp, _profit, _commission, _swap);
 	}
 
-	Order(Order& o)
+	Order(Order& o)//构造
 	{
 		_sent = o._sent;
 		diffBitMap = 0;
 		reset(o.ticket, o.type, o.openTime, o.closeTime, o.magic, o.expiration, o.symbol, o.comment, o.lots, o.openPrice, o.closePrice, o.sl, o.tp, o.profit, o.commission, o.swap);
 	}
-
+	//重新设置函数
 	void reset(int _ticket, int _type, int _openTime, int _closeTime, int _magic, int _expiration, wchar_t const* _symbol, wchar_t const* _comment, double _lots, double _openPrice, double _closePrice, double _sl, double _tp, double _profit, double _commission, double _swap)
 	{
 		this->ticket = _ticket;
@@ -439,7 +440,7 @@ public:
 		wcscpy_s(this->symbol, MAX_SYMBOL_SZ, _symbol);
 		wcscpy_s(this->comment, MAX_COMMENT_SZ, _comment);
 	}
-
+	//存储不同？不知道干嘛的
 	int storeDifference(Order& o)
 	{
 		diffBitMap = 0;
@@ -520,7 +521,7 @@ public:
 			return _sent ? 1 : 0;
 		}
 	}
-
+	//坟墓？？？不知道干嘛的
 	const char* tombs(const wchar_t* wc, char* c)
 	{
 		size_t n = mywcstombs(wc, c, 999);
@@ -535,7 +536,7 @@ public:
 		}
 		return c;
 	}
-
+	//tostring方法
 	int ToString(char* info, int sz)
 	{
 		if (ticket == 0)
@@ -582,7 +583,7 @@ public:
 			return sprintf_s(info, sz, "\x01%s|%d\x02", "C0", ticket);
 		}
 	}
-
+	//获取字符串长度
 	size_t GetStringLength()
 	{
 		if (ticket == 0)

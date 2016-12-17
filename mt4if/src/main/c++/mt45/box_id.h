@@ -53,7 +53,7 @@
 
 using namespace std;
 
-#include <comdef.h>
+#include <comdef.h> //comdef.h 里边定义了各种接口及类，是实现COM组件的基础类型，类似于MFC程序的各种类一样，没有这些接口时自己来实现也一样
 
 #define buf_sz 10240
 

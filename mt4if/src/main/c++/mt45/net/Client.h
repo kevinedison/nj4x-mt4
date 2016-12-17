@@ -570,7 +570,7 @@ public:
 	void sendRes(char* res, size_t nBytes);
 	void sendLine(const char* buffer, size_t nBytes) throw(int) override;
 	int receiveLine(char* buffer, int bufSize) throw(int) override;
-
+	//填充客户端？？？
 	void fillClientRes(char* res, size_t nBytes)
 	{
 		int len;
@@ -715,12 +715,12 @@ public:
 			free(buffer);
 		}
 	}
-
+	//订单信息
 	int OrderInfo(int pool, int _ticket, int _type, int _openTime, int _closeTime, int _magic, int _expiration, wchar_t const* _symbol, wchar_t const* _comment, double _lots, double _openPrice, double _closePrice, double _sl, double _tp, double _profit, double _commission, double _swap)
 	{
 		switch (pool)
 		{
-		case 0: //trades
+		case 0: //trades 交易
 			if (positionInit)
 			{
 				if (maxDebug)
@@ -738,7 +738,7 @@ public:
 				Order o(_ticket, _type, _openTime, _closeTime, _magic, _expiration, _symbol, _comment, _lots, _openPrice, _closePrice, _sl, _tp, _profit, _commission, _swap);
 				return processLiveOrder(o);
 			}
-		case 1: //history
+		case 1: //history  历史行情
 			if (positionInit)
 			{
 				if (maxDebug)
@@ -778,7 +778,7 @@ public:
 	}
 
 	//
-	// Position
+	// Position不知道这个位置指的是什么
 	//
 	void PositionInit(int mode)
 	{
@@ -797,17 +797,17 @@ public:
 		tCount = _tCount;
 		hCount = _hCount;
 	}
-
+	//reset？
 	void MqlRatesRes()
 	{
 		specialResultCode = 10006;
 	}
-
+	//汇率初始化
 	void MqlRatesInit()
 	{
 		Rates.clear();
 	}
-
+	//增加汇率
 	void MqlRatesAdd(MqlRates* rates)
 	{
 		Rates.push_back(auto_ptr<Rate>(new Rate(rates)));
@@ -870,7 +870,7 @@ public:
 			stats.clear();
 		}
 	}
-
+	//转换成CSV
 	void StatsCSV()
 	{
 #if DEBUG_DLL
@@ -916,7 +916,7 @@ public:
 private:
 	void connect();
 
-	int processLiveOrder(Order& o)
+	int processLiveOrder(Order& o)//执行现有的订单
 	{
 		if (LiveOrders.count(o.ticket))
 		{
@@ -936,7 +936,7 @@ private:
 		}
 	}
 
-	void processHistoricalOrder(Order& o)
+	void processHistoricalOrder(Order& o)//执行历史订单
 	{
 		if (LiveOrders.count(o.ticket))
 		{

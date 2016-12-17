@@ -55,7 +55,7 @@ using namespace std;
 	#define DELTA_EPOCH_IN_MILLIS		11644473600000ULL
 	#define DELTA_EPOCH_IN_MICROSECS	11644473600000000ULL
 #endif
-
+//时区结构体
 struct timezone
 {
 	int tz_minuteswest; /* minutes W of Greenwich */
