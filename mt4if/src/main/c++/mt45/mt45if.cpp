@@ -36,7 +36,7 @@
  *  SUCH DAMAGE.
  */
 // mt45if.cpp : Defines the exported functions for the DLL application.
-//定义了外部的函数接口
+// 定义了DLL的导出功能
 //
 
 #include "stdafx.h"
@@ -51,13 +51,15 @@ using std::exception;
 
 #pragma comment(lib, "advapi32.lib")
 
-#ifdef USE_MT4_THREADS
+#ifdef USE_MT4_THREADS  //使用MT4的线程
 
-extern HWND get_window_handle_by_PID(int pid);
-
+extern HWND get_window_handle_by_PID(int pid); //通过PID来获取windows窗体的句柄
+//找到当前的线程或者进程的PID
 DWORD GetWindowThreadID()
 {
+	//GetCurrentProcessId是获取当前进程一个唯一的标识符。
 	HWND hWnd = get_window_handle_by_PID(GetCurrentProcessId());
+	//GetWindowThreadProcessId 找出某个窗口的创建者（线程或进程），返回创建者的标志符。
 	return GetWindowThreadProcessId(hWnd, nullptr);
 }
 
@@ -71,12 +73,13 @@ __imp__AllocateAndInitializeSid@44
 __imp__FreeSid@4
 */
 
-#ifdef _WIN32
+#ifdef _WIN32  //如果是win32的话执行下面的函数
 /*++
 
 Routine Description:
 
     This routine returns if the service specified is running interactively
+	这个例程返回如果指定的服务交互，不调用控制器
     (not invoked \by the service controller).
 
 Arguments:
@@ -85,7 +88,7 @@ Arguments:
 
 Return Value:
 
-    BOOL - TRUE if the service is an EXE.
+    BOOL - TRUE if the service is an EXE.如果是exe就返回true
 
 
 Note:
@@ -213,20 +216,20 @@ ret:
 }
 #endif
 
-typedef struct tagMT4Thread
+typedef struct tagMT4Thread  //MT4的线程结构体
 {
-	DWORD tID;
-	LONG priorityOriginal, prioritySet;
-	BOOL isSuspended, isEntry;
-	ULONG64 lastCycleTime, deltaCycleTime;
-	int addr;
+	DWORD tID;//貌似是线程ID
+	LONG priorityOriginal, prioritySet; //线程优先级
+	BOOL isSuspended, isEntry;//是否暂停，是否入口
+	ULONG64 lastCycleTime, deltaCycleTime;//上次循环时间，???
+	int addr;//貌似是路径
 } MT4Thread;
 
-MT4Thread threads[100];
+MT4Thread threads[100]; //结构体数组
 int myBaseAddr = 0;
-int threadsPos, updateThreadsCount;
+int threadsPos, updateThreadsCount;//用于数组遍历的
 
-void dumpThreads()
+void dumpThreads()  //线程分析，打印出线程的信息
 {
 	for (int i = 0; i < threadsPos; ++i)
 	{
@@ -244,13 +247,14 @@ void dumpThreads()
 		debug("%s\n", info2);
 	}
 }
-
+//设置线程优先级
 void SetThreadPriority(int tNo, BOOL resume)
 {
 	if (tNo >= 0 && tNo < threadsPos)
 	{
+		//OpenThread是Windows API(应用程序接口) 中的一个常用函数，用于打开一个现有线程对象。 
 		HANDLE hThread = OpenThread(THREAD_SET_LIMITED_INFORMATION, FALSE, threads[tNo].tID);
-		if (hThread == nullptr)
+		if (hThread == nullptr)//线程是空的
 		{
 			char info2[1000];
 			sprintf_s(info2, 1000,
@@ -262,17 +266,17 @@ void SetThreadPriority(int tNo, BOOL resume)
 		}
 		else
 		{
-			if (resume)
+			if (resume)  //resume：继续，恢复
 			{
 				BOOL res = FALSE;
 				if (threads[tNo].prioritySet != threads[tNo].priorityOriginal
 					&& (res = SetThreadPriority(hThread, threads[tNo].priorityOriginal)))
 				{
-					threads[tNo].prioritySet = threads[tNo].priorityOriginal;
+					threads[tNo].prioritySet = threads[tNo].priorityOriginal;//设置线程的优先级
 					//
 					char info2[1000];
 					sprintf_s(info2, 1000,
-					          "RESUME Thread %d, priority, %d, GetWindowThreadID()=%d"
+					          "RESUME Thread %d, priority, %d, GetWindowThreadID()=%d"  //打印出设置好的优先级
 					          , threads[tNo].tID
 					          , threads[tNo].prioritySet
 					          , GetWindowThreadID()
@@ -283,7 +287,7 @@ void SetThreadPriority(int tNo, BOOL resume)
 				{
 					char info2[1000];
 					sprintf_s(info2, 1000,
-					          "ERROR RESUME Thread %d, orig priority %d"
+					          "ERROR RESUME Thread %d, orig priority %d"   //调整线程优先级失败
 					          , threads[tNo].tID
 					          , threads[tNo].priorityOriginal
 					);
@@ -300,7 +304,7 @@ void SetThreadPriority(int tNo, BOOL resume)
 					//
 					char info2[1000];
 					sprintf_s(info2, 1000,
-					          "SUSPEND Thread %d, priority, %d, GetWindowThreadID()=%d"
+					          "SUSPEND Thread %d, priority, %d, GetWindowThreadID()=%d"  //延迟线程，调低线程
 					          , threads[tNo].tID
 					          , threads[tNo].prioritySet
 					          , GetWindowThreadID()
@@ -332,8 +336,8 @@ void SetThreadPriority(int tNo, BOOL resume)
 		debug("%s\n", info2);
 	}
 }
-
-void SuspendResumeThread(int tNo, BOOL resume)
+//延时线程
+void SuspendResumeThread(int tNo, BOOL resume)  //resume这个变量：true：恢复线程；false：延时线程
 {
 	if (tNo >= 0 && tNo < threadsPos)
 	{
@@ -353,7 +357,7 @@ void SuspendResumeThread(int tNo, BOOL resume)
 			if (resume)
 			{
 				DWORD res = 0;
-				if (threads[tNo].isSuspended && -1 != (res = ResumeThread(hThread)))
+				if (threads[tNo].isSuspended && -1 != (res = ResumeThread(hThread)))  //ResumeThread 线程恢复函数
 				{
 					threads[tNo].isSuspended = FALSE;
 					//
@@ -365,7 +369,7 @@ void SuspendResumeThread(int tNo, BOOL resume)
 					);
 					debug("%s\n", info2);
 				}
-				else if (res == -1)
+				else if (res == -1)//恢复失败之后
 				{
 					char info2[1000];
 					sprintf_s(info2, 1000,
@@ -415,10 +419,10 @@ void SuspendResumeThread(int tNo, BOOL resume)
 		debug("%s\n", info2);
 	}
 }
-
+// volatile  提醒编译器它后面所定义的变量随时都有可能改变，因此编译后的程序每次需要存储或读取这个变量的时候，都会直接从变量地址中读取数据。
 bool volatile isGUIThreadSuspended = false;
 DWORD volatile GUIThreadID = NULL;
-
+//恢复或者延时GUI线程
 void SuspendResumeGUIThread(BOOL resume)
 {
 	if (resume && !isGUIThreadSuspended || !resume && isGUIThreadSuspended)
@@ -499,7 +503,7 @@ void SuspendResumeGUIThread(BOOL resume)
 	ReleaseMutex(hThreads);
 }
 
-BOOL isAService;
+BOOL isAService;//是否后台服务
 BOOL errorState = FALSE;
 
 
@@ -507,7 +511,7 @@ long lastUpdate = 0;
 
 
 typedef NTSTATUS (WINAPI *NtQueryInformationThread)(
-	IN HANDLE ThreadHandle,
+	   IN HANDLE ThreadHandle,
 	   IN int ThreadInformationClass,
 	   OUT PVOID ThreadInformation,
 	   IN ULONG ThreadInformationLength,
@@ -518,12 +522,12 @@ NtQueryInformationThread ntQit;
 
 #endif //USE_MT4_THREADS
 
+//这个类定义了外部的接口函数，主要是两部分：一部分是通信连接方面；另一部分是MQ的处理，具体的实现都是其他类来完成的，相当于是个代理。
 
-
-static map<wstring, Client*> clients;
+static map<wstring, Client*> clients; //Client是C++ Socket的一个对象
 static __int64 lastStatsDump = 0;
 
-void dumpStatistics()
+void dumpStatistics() 
 {
 #if DEBUG_DLL
 	__int64 now = Util::currentTimeMillis();
@@ -555,9 +559,9 @@ void dumpStatistics()
 
 
 /**
-    Connect to FXServer
-    Setup currency pair (symbol)
-    Setup strategy name
+    Connect to FXServer  连接到FXServer
+    Setup currency pair (symbol)   货币对
+    Setup strategy name   策略名称
 */
 MT4_EXPFUNC wchar_t const* __stdcall jfxConnect(wchar_t const* host, int port, wchar_t const* symbol, int period, wchar_t const* strategy)
 {
@@ -582,7 +586,7 @@ MT4_EXPFUNC wchar_t const* __stdcall jfxConnect(wchar_t const* host, int port, w
 		unique_lock<mutex> lock(sConnections);
 #endif
 		//
-		Client* c = clients[ci.getKey()];
+		Client* c = clients[ci.getKey()];  //连接为空
 		if (c != nullptr)
 		{
 			debug("exit (0) from jfxConnect, %s.\n", ci.getKey());
@@ -595,12 +599,12 @@ MT4_EXPFUNC wchar_t const* __stdcall jfxConnect(wchar_t const* host, int port, w
 			return c->connInfo->getKey();//"";
 		}
 		//
-		if (port == 17342)
+		if (port == 17342)  //端口是17342
 		{
 			debug("jfxConnect [key=%s]\n", ci.getKey());
 		}
 		//
-		c = clients[ci.getKey()] = new Client(host, port, symbol, period, strategy);
+		c = clients[ci.getKey()] = new Client(host, port, symbol, period, strategy);  //新建连接Client
 		//
 #ifdef USE_MT4_THREADS
 		BOOL ir = false;// InitMT4Threads();
@@ -641,12 +645,12 @@ MT4_EXPFUNC wchar_t const* __stdcall jfxConnect(wchar_t const* host, int port, w
 
 extern int hwnd;
 
-void CALLBACK PrintInfo(char* b, size_t sz, LPARAM cPtr)
+void CALLBACK PrintInfo(char* b, size_t sz, LPARAM cPtr)//打印信息的回调，节约资源？
 {
 	debug("%s\n", b);
 }
 
-MT4_EXPFUNC void __stdcall jfxLog(wchar_t const* info)
+MT4_EXPFUNC void __stdcall jfxLog(wchar_t const* info)   //jfx的日志
 {
 	try
 	{
@@ -678,7 +682,7 @@ MT4_EXPFUNC void __stdcall jfxLog(wchar_t const* info)
 	}
 }
 
-Client* GetClient(wchar_t const* sessionID)
+Client* GetClient(wchar_t const* sessionID)		//根据SessionId获取连接
 {
 #ifndef USE_MT4_THREADS
 	if (my_lock(&sConnectionsXP, 10000, true) /* WaitForSingleObject(hConnections, 60000) == WAIT_TIMEOUT */)
@@ -695,7 +699,7 @@ Client* GetClient(wchar_t const* sessionID)
 	return c;
 }
 
-Client* RemoveClient(wchar_t const* sessionID)
+Client* RemoveClient(wchar_t const* sessionID)  //删除连接
 {
 #ifndef USE_MT4_THREADS
 	if (my_lock(&sConnectionsXP, 10000, true) /* WaitForSingleObject(hConnections, 60000) == WAIT_TIMEOUT */)
@@ -715,7 +719,7 @@ Client* RemoveClient(wchar_t const* sessionID)
 
 extern bool swhide();
 extern bool swshow();
-MT4_EXPFUNC void __stdcall jfxHWnd(int hWnd, bool swHide)
+MT4_EXPFUNC void __stdcall jfxHWnd(int hWnd, bool swHide)   //MT4的外部函数，貌似是操作jfx的句柄
 {
 	if (hWnd != 0)
 	{
@@ -735,7 +739,7 @@ MT4_EXPFUNC void __stdcall jfxHWnd(int hWnd, bool swHide)
 	}
 }
 
-MT4_EXPFUNC void __stdcall jfxDisconnect(wchar_t const* sessionID)
+MT4_EXPFUNC void __stdcall jfxDisconnect(wchar_t const* sessionID) //断开连接
 {
 	debug("enter to jfxDisconnect, %s.\n", sessionID);
 	//fflush(debug);
@@ -762,7 +766,7 @@ MT4_EXPFUNC void __stdcall jfxDisconnect(wchar_t const* sessionID)
 }
 
 static int cmd = 0;
-
+//获取命令
 MT4_EXPFUNC int __stdcall jfxGetCommand(wchar_t const* sessionID, wchar_t* p1, wchar_t* p2, wchar_t* p3, wchar_t* p4, wchar_t* p5, wchar_t* p6, wchar_t* p7, wchar_t* p8, wchar_t* p9, wchar_t* p10, wchar_t* p11, wchar_t* p12, wchar_t* p13, wchar_t* p14, wchar_t* p15)
 {
 	int cmdId = -1;
@@ -846,7 +850,7 @@ void CALLBACK SendRes(char* b, size_t sz, LPARAM cPtr)
 {
 	reinterpret_cast<Client*>(cPtr)->sendRes(b, sz);
 }
-
+//发送结果
 MT4_EXPFUNC void __stdcall jfxSendResult(wchar_t const* sessionID, wchar_t const* res)
 {
 	Client* c = GetClient(sessionID);
@@ -858,7 +862,7 @@ MT4_EXPFUNC void __stdcall jfxSendResult(wchar_t const* sessionID, wchar_t const
 	//
 	dumpStatistics();
 }
-
+//初始化位置？？？
 MT4_EXPFUNC void __stdcall jfxPositionInit(wchar_t const* sessID, int mode)
 {
 	Client* c = GetClient(sessID);
@@ -873,7 +877,7 @@ MT4_EXPFUNC void __stdcall jfxPositionInit(wchar_t const* sessID, int mode)
 		c->PositionInit(mode);
 	}
 }
-
+//订单？？？
 MT4_EXPFUNC int __stdcall jfxPositionOrderInfo(wchar_t const* sessID, int is_history, int ticket, int type, int openTime, int closeTime, int magic, int expiration, wchar_t const* symbol, wchar_t const* comment, double lots, double openPrice, double closePrice, double sl, double tp, double profit, double commission, double swap)
 {
 	Client* c = GetClient(sessID);
@@ -889,7 +893,7 @@ MT4_EXPFUNC int __stdcall jfxPositionOrderInfo(wchar_t const* sessID, int is_his
 		return c->OrderInfo(is_history, ticket, type, openTime, closeTime, magic, expiration, symbol, comment, lots, openPrice, closePrice, sl, tp, profit, commission, swap);
 	}
 }
-
+//这个目前还不知道是干嘛的
 MT4_EXPFUNC wchar_t const* __stdcall jfxPositionRes(wchar_t const* sessID, int tCount, int hCount)
 {
 	Client* c = GetClient(sessID);
@@ -906,7 +910,7 @@ MT4_EXPFUNC wchar_t const* __stdcall jfxPositionRes(wchar_t const* sessID, int t
 	return L"";
 }
 
-
+//初始化mql的行情，这些都是Client对象完成的
 MT4_EXPFUNC int __stdcall jfxMqlRatesInit(wchar_t const* sessID)
 {
 	Client* c = GetClient(sessID);
@@ -922,7 +926,7 @@ MT4_EXPFUNC int __stdcall jfxMqlRatesInit(wchar_t const* sessID)
 	//
 	return 1;
 }
-
+//对汇率的操作，不知道Add是什么意思，貌似是增加到vector的后面
 MT4_EXPFUNC int __stdcall jfxMqlRatesAdd(wchar_t const* sessID, MqlRates* rates)
 {
 	Client* c = GetClient(sessID);

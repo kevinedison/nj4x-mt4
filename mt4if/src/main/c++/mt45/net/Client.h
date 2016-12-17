@@ -35,7 +35,7 @@
  *  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
  */
-//这个应该是客户端，是什么的客户端就不知道了
+//这个应该是网络连接的客户端
 #pragma once
 
 #ifndef CLIENT_H_

@@ -37,7 +37,7 @@
  */
 
 
-//这个是行情的类
+//这个MQ的操作类
 #pragma once
 #ifndef Mql_H
 #define Mql_H
